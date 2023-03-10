@@ -1,0 +1,27 @@
+﻿<Window x:Class="FaceSplitScripter.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FaceSplitScripter"
+        mc:Ignorable="d"
+        Title="[-_-] Lootsplit Script Generator" Height="400" Width="500"
+        Background="DarkRed">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Label FontWeight="Bold" Grid.Column="0" Grid.Row="0">Paste Lootsplit Text:</Label>
+        <TextBox TextChanged="LootsplitText_TextChanged" Grid.Column="1" Grid.Row="0" Height="20" HorizontalAlignment="Stretch" Margin="5"/>
+        <Label FontWeight="Bold" Grid.Column="0" Grid.Row="1">Razor Script:</Label>
+        <TextBox Grid.Column="1" Grid.Row="1" Name="textBox_RazorScript" IsReadOnly="true" Margin="5" VerticalScrollBarVisibility="Auto"></TextBox>
+        <Label FontWeight="Bold" Grid.Column="0" Grid.Row="2">Manual Items:</Label>
+        <TextBox Grid.Column="1" Grid.Row="2" Name="textBox_ManualItems" IsReadOnly="true" Margin="5" VerticalScrollBarVisibility="Auto"></TextBox>
+    </Grid>
+</Window>
