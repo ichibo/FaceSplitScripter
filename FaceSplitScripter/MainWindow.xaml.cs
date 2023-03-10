@@ -1,5 +1,4 @@
-﻿using FaceParser;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace FaceSplitScripter
@@ -27,7 +26,7 @@ namespace FaceSplitScripter
                     var result = converter.ConvertLootsplitTextToRazorMacro(newText);
 
                     textBox_RazorScript.Text = result.GetScript();
-                    textBox_ManualItems.Text = result.GetErrors();
+                    textBox_ManualItems.Text = result.GetManualItems();
                 }
                 catch
                 {

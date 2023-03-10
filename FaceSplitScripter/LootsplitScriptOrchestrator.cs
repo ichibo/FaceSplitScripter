@@ -3,22 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FaceParser
+namespace FaceSplitScripter
 {
     public class LootsplitScriptOrchestrator
     {
-        public const string ASPECT_TOME_GUMP_ID = "265325939";
-        public const string TMAP_TOME_GUMP_ID = "1863945839";
-        public const string SKILLSCROLL_TOME_GUMP_ID = "2125225775";
-
-        public const string NEXT_PAGE_FOR_SKILLSCROLL_TOME = "5";
-
-        public const string CORE_IDENTIFIER = "core";
-        public const string EXTRACT_IDENTIFIER = "extr";
-        public const string TREASURE_MAP_IDENTIFIER = "lvl";
-        public const string SKILL_ORB_IDENTIFIER = "skill orb";
-        public const string MCD_IDENTIFIER = "mcd";
-
         private ScriptBuilder _scriptBuilder;
 
         public LootsplitScriptOrchestrator()
@@ -28,151 +16,14 @@ namespace FaceParser
 
         public ScriptBuilder ConvertLootsplitTextToRazorMacro(string text)
         {
-            IEnumerable<ILootItem> lootItems = ParseFullLootsplitText(text);
+            IEnumerable<ILootItem> lootItems = LootTextParser.ParseFullLootsplitText(text);
             return CreateRazorMacroFromLootItems(lootItems);
-        }
-
-        public IEnumerable<ILootItem> ParseFullLootsplitText(string text)
-        {
-            List<ILootItem> fullList = new List<ILootItem>();
-
-            // 1. Split items by ","
-            string[] splitLootText = text.Split(',');
-
-            foreach (string lootLine in splitLootText)
-            {
-                IEnumerable<ILootItem> lootItems = ParseSingleLootsplitText(lootLine);
-
-                if (lootItems.Count() > 0)
-                {
-                    fullList.AddRange(lootItems);
-                }
-            }
-
-            return fullList;
-        }
-
-        public IEnumerable<ILootItem> ParseSingleLootsplitText(string text)
-        {
-            int itemCount = GetQuantityFromText(text);
-            List<ILootItem> items = new List<ILootItem>();
-
-            if (text.ToLower().Contains(SKILL_ORB_IDENTIFIER))
-            {
-                for (int i = 0; i < itemCount; i++)
-                {
-                    items.Add(new SkillOrbLootItem());
-                }
-            }
-
-            else if (text.ToLower().Contains(MCD_IDENTIFIER))
-            {
-                for (int i = 0; i < itemCount; i++)
-                {
-                    items.Add(new MCDLootItem());
-                }
-            }
-
-            else if(text.ToLower().Contains(CORE_IDENTIFIER))
-            {
-                Aspect aspect = EnumUtils.GetAspectFromText(text);
-
-                if (aspect != Aspect.None)
-                {
-                    for (int i = 0; i < itemCount; i++)
-                    {
-                        items.Add(new AspectCoreLootItem(aspect));
-                    }
-                }
-
-                else
-                {
-                    _scriptBuilder.AddErroredItem(text);
-                }
-            }
-
-            else if (text.ToLower().Contains(EXTRACT_IDENTIFIER))
-            {
-                Aspect aspect = EnumUtils.GetAspectFromText(text);
-
-                if (aspect != Aspect.None)
-                {
-                    for (int i = 0; i < itemCount; i++)
-                    {
-                        items.Add(new AspectExtractLootItem(aspect));
-                    }
-                }
-
-                else
-                {
-                    _scriptBuilder.AddErroredItem(text);
-                }
-            }
-
-            else if (text.ToLower().Contains(TREASURE_MAP_IDENTIFIER))
-            {
-                TreasureMapLevel tmapLevel = EnumUtils.GetTreasureMapLevelFromText(text);
-
-                if (tmapLevel != TreasureMapLevel.None)
-                {
-                    for (int i = 0; i < itemCount; i++)
-                    {
-                        items.Add(new TreasureMapLootItem(tmapLevel));
-                    }
-                }
-
-                else
-                {
-                    _scriptBuilder.AddErroredItem(text);
-                }
-            }
-
-            // Anything else might be a skill scroll since they don't have any static identifier
-            else
-            {
-                SkillScroll skillScroll = EnumUtils.GetSkillScrollFromText(text);
-
-                if (skillScroll != SkillScroll.None)
-                {
-                    for (int i = 0; i < itemCount; i++)
-                    {
-                        int skillScrollPage = EnumUtils.GetSkillScrollPage(skillScroll);
-                        items.Add(new SkillScrollLootItem(skillScroll, skillScrollPage));
-                    }
-                }
-
-                else
-                {
-                    _scriptBuilder.AddErroredItem(text);
-                }
-            }
-
-            return items;
-        }
-
-        public int GetQuantityFromText(string text)
-        {
-            int quantityStartIndex = text.IndexOf('(') + 1;
-            int quantityEndIndex = text.IndexOf(')');
-            int quantityLength = quantityEndIndex - quantityStartIndex;
-
-            string quantityText = text.Substring(quantityStartIndex, quantityLength);
-
-            try
-            {
-                int quantity = Int32.Parse(quantityText);
-                return quantity;
-            }
-            catch
-            {
-                return 1;
-            }
         }
 
         public ScriptBuilder CreateRazorMacroFromLootItems(IEnumerable<ILootItem> lootItems)
         {
-            // 0. SetVar to tome chest.
-            _scriptBuilder.AddOverhead("-- Target the tome container --");
+            // 0. Do script initializations.
+            _scriptBuilder.AddOverhead("-- Target Loot Container --");
             _scriptBuilder.InitializeVars();
             _scriptBuilder.GetTargetContainerForScript();
             _scriptBuilder.SetScriptIds();
@@ -184,37 +35,16 @@ namespace FaceParser
             ILootItem[] cores = lootItems.Where(x => x.LootType == LootType.Core).ToArray();
             ILootItem[] tmaps = lootItems.Where(x => x.LootType == LootType.TreasureMap).ToArray();
             ILootItem[] skillScrolls = lootItems.Where(x => x.LootType == LootType.SkillScroll).ToArray();
+            ILootItem[] manualItems = lootItems.Where(x => x.LootType == LootType.Manual).ToArray();
 
-            // 2.Iterate on each item per tome and do the gump click once.
-            if (skillOrbs.Length > 0)
-            {
-                _scriptBuilder.AddGCDWait();
-                GenerateSkillOrbScripts(skillOrbs);
-            }
+            // 2.Iterate on each item type and build the necessary scripts.
+            GenerateSkillOrbScripts(skillOrbs);
+            GenerateMCDScripts(mcds);
+            GenerateAspectTomeScripts(extracts, cores);
+            GenerateTmapsTomeScripts(tmaps);
+            GenerateSkillScrollTomeScripts(skillScrolls);
 
-            if (mcds.Length > 0)
-            {
-                _scriptBuilder.AddGCDWait();
-                GenerateMCDScripts(mcds);
-            }
-
-            if (extracts.Length > 0 || cores.Length > 0)
-            {
-                _scriptBuilder.AddGCDWait();
-                GenerateAspectTomeScripts(extracts, cores);
-            }
-
-            if (tmaps.Length > 0)
-            {
-                _scriptBuilder.AddGCDWait();
-                GenerateTmapsTomeScripts(tmaps);
-            }
-
-            if (skillScrolls.Length > 0)
-            {
-                _scriptBuilder.AddGCDWait();
-                GenerateSkillScrollTomeScripts(skillScrolls);
-            }
+            ProcessManualItems(manualItems);
 
             _scriptBuilder.AddOverhead("All loot complete!");
 
@@ -223,108 +53,136 @@ namespace FaceParser
 
         private void GenerateSkillOrbScripts(ILootItem[] skillOrbs)
         {
-            _scriptBuilder.AddOverhead("Starting skill orbs...");
-            _scriptBuilder.AddComment("Beginning Skill Orbs");
+            if (skillOrbs.Length > 0)
+            {
+                _scriptBuilder.AddGCDWait();
+                _scriptBuilder.AddOverhead("Starting skill orbs...");
+                _scriptBuilder.AddComment("Beginning Skill Orbs");
 
-            int quantity = skillOrbs.Length;
+                int quantity = skillOrbs.Length;
 
-            _scriptBuilder.LiftSkillOrb(quantity);
-            _scriptBuilder.AddGCDWait();
-            _scriptBuilder.DropOnSelf();
-            _scriptBuilder.AddGCDWait();
+                _scriptBuilder.LiftSkillOrb(quantity);
+                _scriptBuilder.AddGCDWait();
+                _scriptBuilder.DropOnSelf();
+                _scriptBuilder.AddGCDWait();
 
-            _scriptBuilder.AddOverhead("Skill orbs done.");
+                _scriptBuilder.AddOverhead("Skill orbs done.");
+            }
         }
 
         private void GenerateMCDScripts(ILootItem[] mcds)
         {
-            _scriptBuilder.AddOverhead("Starting MCDs...");
-            _scriptBuilder.AddComment("Beginning MCDs");
+            if (mcds.Length > 0)
+            {
+                _scriptBuilder.AddGCDWait();
+                _scriptBuilder.AddOverhead("Starting MCDs...");
+                _scriptBuilder.AddComment("Beginning MCDs");
 
-            int quantity = mcds.Length;
+                int quantity = mcds.Length;
 
-            _scriptBuilder.LiftMCD(quantity);
-            _scriptBuilder.AddGCDWait();
-            _scriptBuilder.DropOnSelf();
-            _scriptBuilder.AddGCDWait();
+                _scriptBuilder.LiftMCD(quantity);
+                _scriptBuilder.AddGCDWait();
+                _scriptBuilder.DropOnSelf();
+                _scriptBuilder.AddGCDWait();
 
-            _scriptBuilder.AddOverhead("MCDs done.");
+                _scriptBuilder.AddOverhead("MCDs done.");
+            }
         }
 
-        private void GenerateSkillScrollTomeScripts(ILootItem[] skillScrolls)
+        private void GenerateSkillScrollTomeScripts(IEnumerable<ILootItem> skillScrolls)
         {
-            _scriptBuilder.AddOverhead("Starting skill scrolls...");
-            _scriptBuilder.AddComment("Beginning Skill Scroll Tome");
-            _scriptBuilder.DoubleClickSkillScrollTome();
-            _scriptBuilder.AddGCDWait();
-
-            ILootItem[] pageOneScrolls = skillScrolls.Where(x => x.TomePage == 1).ToArray();
-            ILootItem[] pageTwoScrolls = skillScrolls.Where(x => x.TomePage == 2).ToArray();
-
-            foreach (ILootItem scroll in pageOneScrolls)
+            if (skillScrolls.Count() > 0)
             {
-                _scriptBuilder.WaitForGump(SKILLSCROLL_TOME_GUMP_ID);
-                _scriptBuilder.GumpResponse(SKILLSCROLL_TOME_GUMP_ID, scroll.GumpResponseButtonForTome);
-            }
+                _scriptBuilder.AddGCDWait();
+                _scriptBuilder.AddOverhead("Starting skill scrolls...");
+                _scriptBuilder.AddComment("Beginning Skill Scroll Tome");
+                _scriptBuilder.DoubleClickSkillScrollTome();
+                _scriptBuilder.AddGCDWait();
 
-            if (pageTwoScrolls.Length > 0)
-            {
-                _scriptBuilder.AddComment("Skill Scroll Tome Page 2");
-                _scriptBuilder.WaitForGump(SKILLSCROLL_TOME_GUMP_ID);
-                _scriptBuilder.GumpResponse(SKILLSCROLL_TOME_GUMP_ID, NEXT_PAGE_FOR_SKILLSCROLL_TOME);
+                ILootItem[] pageOneScrolls = skillScrolls.Where(x => x.TomePage == 1).ToArray();
+                ILootItem[] pageTwoScrolls = skillScrolls.Where(x => x.TomePage == 2).ToArray();
 
-                foreach (ILootItem scroll in pageTwoScrolls)
+                foreach (ILootItem scroll in pageOneScrolls)
                 {
-                    _scriptBuilder.WaitForGump(SKILLSCROLL_TOME_GUMP_ID);
-                    _scriptBuilder.GumpResponse(SKILLSCROLL_TOME_GUMP_ID, scroll.GumpResponseButtonForTome);
+                    _scriptBuilder.WaitForGump(Constants.SKILLSCROLL_TOME_GUMP_ID);
+                    _scriptBuilder.GumpResponse(Constants.SKILLSCROLL_TOME_GUMP_ID, scroll.GumpResponseButtonForTome);
                 }
-            }
 
-            _scriptBuilder.AddOverhead("Skill scrolls done.");
-            _scriptBuilder.AddGCDWait();
-            _scriptBuilder.GumpClose(SKILLSCROLL_TOME_GUMP_ID);
+                if (pageTwoScrolls.Length > 0)
+                {
+                    _scriptBuilder.AddComment("Skill Scroll Tome Page 2");
+                    _scriptBuilder.WaitForGump(Constants.SKILLSCROLL_TOME_GUMP_ID);
+                    _scriptBuilder.GumpResponse(Constants.SKILLSCROLL_TOME_GUMP_ID, Constants.NEXT_PAGE_FOR_SKILLSCROLL_TOME);
+
+                    foreach (ILootItem scroll in pageTwoScrolls)
+                    {
+                        _scriptBuilder.WaitForGump(Constants.SKILLSCROLL_TOME_GUMP_ID);
+                        _scriptBuilder.GumpResponse(Constants.SKILLSCROLL_TOME_GUMP_ID, scroll.GumpResponseButtonForTome);
+                    }
+                }
+
+                _scriptBuilder.AddOverhead("Skill scrolls done.");
+                _scriptBuilder.AddGCDWait();
+                _scriptBuilder.GumpClose(Constants.SKILLSCROLL_TOME_GUMP_ID);
+            }
         }
 
-        private void GenerateTmapsTomeScripts(ILootItem[] tmaps)
+        private void GenerateTmapsTomeScripts(IEnumerable<ILootItem> tmaps)
         {
-            _scriptBuilder.AddOverhead("Starting treasure maps...");
-            _scriptBuilder.AddComment("Beginning Treasure Map Tome");
-            _scriptBuilder.DoubleClickTreasureMapTome();
-            _scriptBuilder.AddGCDWait();
-
-            foreach (ILootItem tmap in tmaps)
+            if (tmaps.Count() > 0)
             {
-                _scriptBuilder.WaitForGump(TMAP_TOME_GUMP_ID);
-                _scriptBuilder.GumpResponse(TMAP_TOME_GUMP_ID, tmap.GumpResponseButtonForTome);
-            }
+                _scriptBuilder.AddGCDWait();
+                _scriptBuilder.AddOverhead("Starting treasure maps...");
+                _scriptBuilder.AddComment("Beginning Treasure Map Tome");
+                _scriptBuilder.DoubleClickTreasureMapTome();
+                _scriptBuilder.AddGCDWait();
 
-            _scriptBuilder.AddOverhead("Treasure maps done.");
-            _scriptBuilder.AddGCDWait();
-            _scriptBuilder.GumpClose(TMAP_TOME_GUMP_ID);
+                foreach (ILootItem tmap in tmaps)
+                {
+                    _scriptBuilder.WaitForGump(Constants.TMAP_TOME_GUMP_ID);
+                    _scriptBuilder.GumpResponse(Constants.TMAP_TOME_GUMP_ID, tmap.GumpResponseButtonForTome);
+                }
+
+                _scriptBuilder.AddOverhead("Treasure maps done.");
+                _scriptBuilder.AddGCDWait();
+                _scriptBuilder.GumpClose(Constants.TMAP_TOME_GUMP_ID);
+            }
         }
 
-        private void GenerateAspectTomeScripts(ILootItem[] extracts, ILootItem[] cores)
+        private void GenerateAspectTomeScripts(IEnumerable<ILootItem> extracts, IEnumerable<ILootItem> cores)
         {
-            _scriptBuilder.AddOverhead("Starting aspect items...");
-            _scriptBuilder.AddComment("Beginning Aspect Tome");
-            _scriptBuilder.DoubleClickAspectTome();
-            _scriptBuilder.AddGCDWait();
-
-            foreach (ILootItem core in cores)
+            if (extracts.Count() > 0 || cores.Count() > 0)
             {
-                _scriptBuilder.WaitForGump(ASPECT_TOME_GUMP_ID);
-                _scriptBuilder.GumpResponse(ASPECT_TOME_GUMP_ID, core.GumpResponseButtonForTome);
-            }
+                _scriptBuilder.AddGCDWait();
+                _scriptBuilder.AddOverhead("Starting aspect items...");
+                _scriptBuilder.AddComment("Beginning Aspect Tome");
+                _scriptBuilder.DoubleClickAspectTome();
+                _scriptBuilder.AddGCDWait();
 
-            foreach (ILootItem extract in extracts)
+                foreach (ILootItem core in cores)
+                {
+                    _scriptBuilder.WaitForGump(Constants.ASPECT_TOME_GUMP_ID);
+                    _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, core.GumpResponseButtonForTome);
+                }
+
+                foreach (ILootItem extract in extracts)
+                {
+                    _scriptBuilder.WaitForGump(Constants.ASPECT_TOME_GUMP_ID);
+                    _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, extract.GumpResponseButtonForTome);
+                }
+
+                _scriptBuilder.AddOverhead("Aspect items done.");
+                _scriptBuilder.AddGCDWait();
+                _scriptBuilder.GumpClose(Constants.ASPECT_TOME_GUMP_ID);
+            }
+        }
+
+        private void ProcessManualItems(IEnumerable<ILootItem> manualItems)
+        {
+            foreach (ILootItem manualItem in manualItems)
             {
-                _scriptBuilder.WaitForGump(ASPECT_TOME_GUMP_ID);
-                _scriptBuilder.GumpResponse(ASPECT_TOME_GUMP_ID, extract.GumpResponseButtonForTome);
+                _scriptBuilder.AddManualItem(manualItem.Description);
             }
-
-            _scriptBuilder.AddOverhead("Aspect items done.");
-            _scriptBuilder.AddGCDWait();
-            _scriptBuilder.GumpClose(ASPECT_TOME_GUMP_ID);
         }
     }
 }

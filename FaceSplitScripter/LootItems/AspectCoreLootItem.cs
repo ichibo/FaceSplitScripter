@@ -1,13 +1,15 @@
-﻿namespace FaceParser
+﻿namespace FaceSplitScripter
 {
     public class AspectCoreLootItem : ILootItem
     {
         public LootType LootType { get { return LootType.Core; } }
         public Aspect Aspect { get; private set; }
         public int TomePage { get { return 1; } }
+        public string Description { get; private set; }
 
-        public AspectCoreLootItem(Aspect aspect)
+        public AspectCoreLootItem(string description, Aspect aspect)
         {
+            Description = description;
             Aspect = aspect;
         }
 
@@ -57,5 +59,6 @@
                 }
             }
         }
+
     }
 }

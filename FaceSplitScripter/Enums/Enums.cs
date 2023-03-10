@@ -1,4 +1,4 @@
-﻿namespace FaceParser
+﻿namespace FaceSplitScripter
 {
     public enum Aspect
     {
@@ -79,6 +79,7 @@
         SkillScroll,
         TreasureMap,
         MCD,
-        SkillOrb
+        SkillOrb,
+        Manual
     }
 }
