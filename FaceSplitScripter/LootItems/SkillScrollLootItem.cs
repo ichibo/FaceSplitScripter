@@ -1,17 +1,17 @@
-﻿namespace FaceParser
+﻿namespace FaceSplitScripter
 {
     public class SkillScrollLootItem : ILootItem
     {
         public LootType LootType { get { return LootType.SkillScroll; } }
         public SkillScroll SkillScroll { get; private set; }
 
-        private int _tomePage;
-        public int TomePage { get { return _tomePage; } }
+        public int TomePage { get { return EnumUtilities.GetSkillScrollPage(SkillScroll); } }
+        public string Description { get; private set; }
 
-        public SkillScrollLootItem(SkillScroll skillScroll, int tomePage)
+        public SkillScrollLootItem(string description, SkillScroll skillScroll)
         {
+            Description = description;
             SkillScroll = skillScroll;
-            _tomePage = tomePage;
         }
 
         public string GumpResponseButtonForTome

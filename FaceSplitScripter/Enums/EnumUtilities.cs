@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace FaceParser
+namespace FaceSplitScripter
 {
-    internal class EnumUtils
+    internal class EnumUtilities
     {
         public static Dictionary<string, Aspect> AspectStringMapping = new Dictionary<string, Aspect>
         {

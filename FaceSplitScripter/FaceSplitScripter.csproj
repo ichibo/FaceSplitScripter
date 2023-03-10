@@ -61,15 +61,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Constants.cs" />
     <Compile Include="LootItems\AspectCoreLootItem.cs" />
     <Compile Include="LootItems\AspectExtractLootItem.cs" />
     <Compile Include="LootItems\ILootItem.cs" />
+    <Compile Include="LootItems\ManualLootItem.cs" />
     <Compile Include="LootItems\MCDLootItem.cs" />
     <Compile Include="LootItems\SkillOrbLootItem.cs" />
+    <Compile Include="LootTextParser.cs" />
     <Compile Include="ScriptBuilder.cs" />
     <Compile Include="LootItems\SkillScrollLootItem.cs" />
     <Compile Include="LootItems\TreasureMapLootItem.cs" />
-    <Compile Include="ScriptUtils.cs" />
+    <Compile Include="ScriptUtilities.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -78,8 +81,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="enums.cs" />
-    <Compile Include="enumUtils.cs" />
+    <Compile Include="Enums\Enums.cs" />
+    <Compile Include="Enums\EnumUtilities.cs" />
     <Compile Include="LootsplitScriptOrchestrator.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

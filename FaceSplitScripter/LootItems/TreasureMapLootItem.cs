@@ -1,13 +1,15 @@
-﻿namespace FaceParser
+﻿namespace FaceSplitScripter
 {
     internal class TreasureMapLootItem: ILootItem
     {
         public LootType LootType { get { return LootType.TreasureMap; } }
         public TreasureMapLevel TreasureMapLevel { get; private set; }
         public int TomePage { get { return 1; } }
+        public string Description { get; private set; }
 
-        public TreasureMapLootItem(TreasureMapLevel treasureMapLevel)
+        public TreasureMapLootItem(string description, TreasureMapLevel treasureMapLevel)
         {
+            Description = description;
             TreasureMapLevel = treasureMapLevel;
         }
 
