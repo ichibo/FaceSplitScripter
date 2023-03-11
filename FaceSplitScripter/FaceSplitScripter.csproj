@@ -69,7 +69,7 @@
     <Compile Include="LootItems\MCDLootItem.cs" />
     <Compile Include="LootItems\SkillOrbLootItem.cs" />
     <Compile Include="LootTextParser.cs" />
-    <Compile Include="ScriptBuilder.cs" />
+    <Compile Include="RazorScriptBuilder.cs" />
     <Compile Include="LootItems\SkillScrollLootItem.cs" />
     <Compile Include="LootItems\TreasureMapLootItem.cs" />
     <Compile Include="ScriptUtilities.cs" />

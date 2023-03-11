@@ -22,5 +22,13 @@ namespace FaceSplitScripter
                 return 1;
             }
         }
+
+        public static string RemoveQuantityFromText(string text)
+        {
+            // Presume that only one set of (xx) exists in the string.
+            string[] separatedString = text.Split('(');
+
+            return separatedString[0];
+        }
     }
 }

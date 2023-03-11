@@ -3,12 +3,12 @@ using System.Text;
 
 namespace FaceSplitScripter
 {
-    public class ScriptBuilder
+    public class RazorScriptBuilder
     {
         private StringBuilder _scriptBuilder;
         private StringBuilder _manualItems;
 
-        public ScriptBuilder()
+        public RazorScriptBuilder()
         {
             _scriptBuilder = new StringBuilder();
             _manualItems = new StringBuilder();

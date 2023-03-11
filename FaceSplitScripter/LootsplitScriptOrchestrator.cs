@@ -7,20 +7,20 @@ namespace FaceSplitScripter
 {
     public class LootsplitScriptOrchestrator
     {
-        private ScriptBuilder _scriptBuilder;
+        private RazorScriptBuilder _scriptBuilder;
 
         public LootsplitScriptOrchestrator()
         {
-            _scriptBuilder = new ScriptBuilder();
+            _scriptBuilder = new RazorScriptBuilder();
         }
 
-        public ScriptBuilder ConvertLootsplitTextToRazorMacro(string text)
+        public RazorScriptBuilder ConvertLootsplitTextToRazorMacro(string text)
         {
             IEnumerable<ILootItem> lootItems = LootTextParser.ParseFullLootsplitText(text);
             return CreateRazorMacroFromLootItems(lootItems);
         }
 
-        public ScriptBuilder CreateRazorMacroFromLootItems(IEnumerable<ILootItem> lootItems)
+        public RazorScriptBuilder CreateRazorMacroFromLootItems(IEnumerable<ILootItem> lootItems)
         {
             // 0. Do script initializations.
             _scriptBuilder.AddOverhead("-- Target Loot Container --");

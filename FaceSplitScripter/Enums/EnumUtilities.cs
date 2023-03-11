@@ -80,11 +80,13 @@ namespace FaceSplitScripter
 
         public static SkillScroll GetSkillScrollFromText(string text)
         {
-            string lowercaseText = text.ToLower();
+            string strippedQuantityText = ScriptUtilities.RemoveQuantityFromText(text);
+            string lowercaseText = strippedQuantityText.ToLower();
 
             foreach (string scrollKey in SkillScrollStringMapping.Keys)
             {
-                if (lowercaseText.Contains(scrollKey))
+                // Skill scrolls should be an exact match as some links or other items may contain the same words as the skill scrolls.
+                if (lowercaseText.Equals(scrollKey))
                 {
                     return SkillScrollStringMapping[scrollKey];
                 }
