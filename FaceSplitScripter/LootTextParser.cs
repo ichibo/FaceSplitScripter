@@ -34,13 +34,13 @@ namespace FaceSplitScripter
             int itemCount = ScriptUtilities.GetQuantityFromText(text);
             List<ILootItem> items = new List<ILootItem>();
             string lowercaseText = text.ToLower();
-            string trimmedText = text.Trim();
+            string processedDescription = text.Trim();
 
             if (lowercaseText.Contains(Constants.SKILL_ORB_IDENTIFIER))
             {
                 for (int i = 0; i < itemCount; i++)
                 {
-                    items.Add(new SkillOrbLootItem(trimmedText));
+                    items.Add(new SkillOrbLootItem(processedDescription));
                 }
             }
 
@@ -48,7 +48,7 @@ namespace FaceSplitScripter
             {
                 for (int i = 0; i < itemCount; i++)
                 {
-                    items.Add(new MCDLootItem(trimmedText));
+                    items.Add(new MCDLootItem(processedDescription));
                 }
             }
 
@@ -60,7 +60,7 @@ namespace FaceSplitScripter
                 {
                     for (int i = 0; i < itemCount; i++)
                     {
-                        items.Add(new AspectCoreLootItem(trimmedText, aspect));
+                        items.Add(new AspectCoreLootItem(processedDescription, aspect));
                     }
                 }
             }
@@ -73,7 +73,7 @@ namespace FaceSplitScripter
                 {
                     for (int i = 0; i < itemCount; i++)
                     {
-                        items.Add(new AspectExtractLootItem(trimmedText, aspect));
+                        items.Add(new AspectExtractLootItem(processedDescription, aspect));
                     }
                 }
             }
@@ -86,7 +86,7 @@ namespace FaceSplitScripter
                 {
                     for (int i = 0; i < itemCount; i++)
                     {
-                        items.Add(new TreasureMapLootItem(trimmedText, tmapLevel));
+                        items.Add(new TreasureMapLootItem(processedDescription, tmapLevel));
                     }
                 }
             }
@@ -100,15 +100,16 @@ namespace FaceSplitScripter
                 {
                     for (int i = 0; i < itemCount; i++)
                     {
-                        items.Add(new SkillScrollLootItem(trimmedText, skillScroll));
+                        items.Add(new SkillScrollLootItem(processedDescription, skillScroll));
                     }
                 }
             }
 
             // We couldn't find anything to add for this line, must be manual.
+            // Show the whole text as-is.
             if (items.Count() == 0)
             {
-                items.Add(new ManualLootItem(trimmedText));
+                items.Add(new ManualLootItem(text));
             }
 
             return items;

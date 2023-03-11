@@ -57,7 +57,7 @@ namespace FaceSplitScripter
             {
                 _scriptBuilder.AddGCDWait();
                 _scriptBuilder.AddOverhead("Starting skill orbs...");
-                _scriptBuilder.AddComment("Beginning Skill Orbs");
+                _scriptBuilder.AddRazorComment("Beginning Skill Orbs");
 
                 int quantity = skillOrbs.Length;
 
@@ -76,7 +76,7 @@ namespace FaceSplitScripter
             {
                 _scriptBuilder.AddGCDWait();
                 _scriptBuilder.AddOverhead("Starting MCDs...");
-                _scriptBuilder.AddComment("Beginning MCDs");
+                _scriptBuilder.AddRazorComment("Beginning MCDs");
 
                 int quantity = mcds.Length;
 
@@ -95,7 +95,7 @@ namespace FaceSplitScripter
             {
                 _scriptBuilder.AddGCDWait();
                 _scriptBuilder.AddOverhead("Starting skill scrolls...");
-                _scriptBuilder.AddComment("Beginning Skill Scroll Tome");
+                _scriptBuilder.AddRazorComment("Beginning Skill Scroll Tome");
                 _scriptBuilder.DoubleClickSkillScrollTome();
                 _scriptBuilder.AddGCDWait();
 
@@ -104,18 +104,20 @@ namespace FaceSplitScripter
 
                 foreach (ILootItem scroll in pageOneScrolls)
                 {
+                    _scriptBuilder.AddRazorComment(scroll.Description);
                     _scriptBuilder.WaitForGump(Constants.SKILLSCROLL_TOME_GUMP_ID);
                     _scriptBuilder.GumpResponse(Constants.SKILLSCROLL_TOME_GUMP_ID, scroll.GumpResponseButtonForTome);
                 }
 
                 if (pageTwoScrolls.Length > 0)
                 {
-                    _scriptBuilder.AddComment("Skill Scroll Tome Page 2");
+                    _scriptBuilder.AddRazorComment("Skill Scroll Tome Page 2");
                     _scriptBuilder.WaitForGump(Constants.SKILLSCROLL_TOME_GUMP_ID);
                     _scriptBuilder.GumpResponse(Constants.SKILLSCROLL_TOME_GUMP_ID, Constants.NEXT_PAGE_FOR_SKILLSCROLL_TOME);
 
                     foreach (ILootItem scroll in pageTwoScrolls)
                     {
+                        _scriptBuilder.AddRazorComment(scroll.Description);
                         _scriptBuilder.WaitForGump(Constants.SKILLSCROLL_TOME_GUMP_ID);
                         _scriptBuilder.GumpResponse(Constants.SKILLSCROLL_TOME_GUMP_ID, scroll.GumpResponseButtonForTome);
                     }
@@ -133,12 +135,13 @@ namespace FaceSplitScripter
             {
                 _scriptBuilder.AddGCDWait();
                 _scriptBuilder.AddOverhead("Starting treasure maps...");
-                _scriptBuilder.AddComment("Beginning Treasure Map Tome");
+                _scriptBuilder.AddRazorComment("Beginning Treasure Map Tome");
                 _scriptBuilder.DoubleClickTreasureMapTome();
                 _scriptBuilder.AddGCDWait();
 
                 foreach (ILootItem tmap in tmaps)
                 {
+                    _scriptBuilder.AddRazorComment(tmap.Description);
                     _scriptBuilder.WaitForGump(Constants.TMAP_TOME_GUMP_ID);
                     _scriptBuilder.GumpResponse(Constants.TMAP_TOME_GUMP_ID, tmap.GumpResponseButtonForTome);
                 }
@@ -155,18 +158,20 @@ namespace FaceSplitScripter
             {
                 _scriptBuilder.AddGCDWait();
                 _scriptBuilder.AddOverhead("Starting aspect items...");
-                _scriptBuilder.AddComment("Beginning Aspect Tome");
+                _scriptBuilder.AddRazorComment("Beginning Aspect Tome");
                 _scriptBuilder.DoubleClickAspectTome();
                 _scriptBuilder.AddGCDWait();
 
                 foreach (ILootItem core in cores)
                 {
+                    _scriptBuilder.AddRazorComment(core.Description);
                     _scriptBuilder.WaitForGump(Constants.ASPECT_TOME_GUMP_ID);
                     _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, core.GumpResponseButtonForTome);
                 }
 
                 foreach (ILootItem extract in extracts)
                 {
+                    _scriptBuilder.AddRazorComment(extract.Description);
                     _scriptBuilder.WaitForGump(Constants.ASPECT_TOME_GUMP_ID);
                     _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, extract.GumpResponseButtonForTome);
                 }

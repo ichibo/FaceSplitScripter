@@ -111,7 +111,7 @@ namespace FaceSplitScripter
             _scriptBuilder.AppendLine($"drop 'self'");
         }
 
-        public void AddComment(string text)
+        public void AddRazorComment(string text)
         {
             _scriptBuilder.AppendLine($"// {text} //");
         }

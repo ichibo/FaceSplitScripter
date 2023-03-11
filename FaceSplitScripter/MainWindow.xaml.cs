@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace FaceSplitScripter
@@ -8,15 +9,20 @@ namespace FaceSplitScripter
     /// </summary>
     public partial class MainWindow : Window
     {
+        const string COPY_TO_CLIPBOARD_TEXT = "Copy to Clipboard";
+
         public MainWindow()
         {
             InitializeComponent();
+            ResetButtonText();
         }
 
         private void LootsplitText_TextChanged(object sender, TextChangedEventArgs e)
         {
             var senderObject = sender as TextBox;
             string newText = senderObject.Text;
+
+            ResetButtonText();
 
             if (newText.Trim() != string.Empty)
             {
@@ -39,6 +45,26 @@ namespace FaceSplitScripter
                 textBox_RazorScript.Text = "...";
                 textBox_ManualItems.Text = "...";
             }
+        }
+
+        private void ResetButtonText()
+        {
+            button_manualItems.Content = COPY_TO_CLIPBOARD_TEXT;
+            button_razorScript.Content = COPY_TO_CLIPBOARD_TEXT;
+        }
+
+        private void button_manualItemsClick(object sender, RoutedEventArgs e)
+        {
+            Button clickedButton = sender as Button;
+            clickedButton.Content = "Copied!";
+            Clipboard.SetText(textBox_ManualItems.Text);
+        }
+
+        private void button_razorScriptClick(object sender, RoutedEventArgs e)
+        {
+            Button clickedButton = sender as Button;
+            clickedButton.Content = "Copied!";
+            Clipboard.SetText(textBox_RazorScript.Text);
         }
     }
 }
