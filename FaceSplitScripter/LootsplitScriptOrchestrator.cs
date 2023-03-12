@@ -110,6 +110,7 @@ namespace FaceSplitScripter
                     _scriptBuilder.AddRazorComment(scroll.Description);
                     _scriptBuilder.WaitForGump(Constants.SKILLSCROLL_TOME_GUMP_ID);
                     _scriptBuilder.GumpResponse(Constants.SKILLSCROLL_TOME_GUMP_ID, scroll.GumpResponseButtonForTome);
+                    _scriptBuilder.WaitForGump(Constants.SKILLSCROLL_TOME_GUMP_ID);
                     _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, scroll.Description);
                 }
 
@@ -124,6 +125,7 @@ namespace FaceSplitScripter
                         _scriptBuilder.AddRazorComment(scroll.Description);
                         _scriptBuilder.WaitForGump(Constants.SKILLSCROLL_TOME_GUMP_ID);
                         _scriptBuilder.GumpResponse(Constants.SKILLSCROLL_TOME_GUMP_ID, scroll.GumpResponseButtonForTome);
+                        _scriptBuilder.WaitForGump(Constants.SKILLSCROLL_TOME_GUMP_ID);
                         _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, scroll.Description);
                     }
                 }
@@ -149,6 +151,7 @@ namespace FaceSplitScripter
                     _scriptBuilder.AddRazorComment(tmap.Description);
                     _scriptBuilder.WaitForGump(Constants.TMAP_TOME_GUMP_ID);
                     _scriptBuilder.GumpResponse(Constants.TMAP_TOME_GUMP_ID, tmap.GumpResponseButtonForTome);
+                    _scriptBuilder.WaitForGump(Constants.TMAP_TOME_GUMP_ID); 
                     _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, tmap.Description);
                 }
 
@@ -173,6 +176,7 @@ namespace FaceSplitScripter
                     _scriptBuilder.AddRazorComment(core.Description);
                     _scriptBuilder.WaitForGump(Constants.ASPECT_TOME_GUMP_ID);
                     _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, core.GumpResponseButtonForTome);
+                    _scriptBuilder.WaitForGump(Constants.ASPECT_TOME_GUMP_ID);
                     _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, core.Description);
                 }
 
@@ -181,6 +185,7 @@ namespace FaceSplitScripter
                     _scriptBuilder.AddRazorComment(extract.Description);
                     _scriptBuilder.WaitForGump(Constants.ASPECT_TOME_GUMP_ID);
                     _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, extract.GumpResponseButtonForTome);
+                    _scriptBuilder.WaitForGump(Constants.ASPECT_TOME_GUMP_ID);
                     _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, extract.Description);
                 }
 
