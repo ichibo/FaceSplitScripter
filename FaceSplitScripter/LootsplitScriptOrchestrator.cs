@@ -8,6 +8,7 @@ namespace FaceSplitScripter
     public class LootsplitScriptOrchestrator
     {
         private RazorScriptBuilder _scriptBuilder;
+        const string MISSING_OBJECT_TEXT_STRING = "of that type are current";
 
         public LootsplitScriptOrchestrator()
         {
@@ -45,6 +46,8 @@ namespace FaceSplitScripter
             GenerateSkillScrollTomeScripts(skillScrolls);
 
             ProcessManualItems(manualItems);
+
+            ProcessMissingItems();
 
             _scriptBuilder.AddOverhead("All loot complete!");
 
@@ -107,6 +110,7 @@ namespace FaceSplitScripter
                     _scriptBuilder.AddRazorComment(scroll.Description);
                     _scriptBuilder.WaitForGump(Constants.SKILLSCROLL_TOME_GUMP_ID);
                     _scriptBuilder.GumpResponse(Constants.SKILLSCROLL_TOME_GUMP_ID, scroll.GumpResponseButtonForTome);
+                    _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, scroll.Description);
                 }
 
                 if (pageTwoScrolls.Length > 0)
@@ -120,6 +124,7 @@ namespace FaceSplitScripter
                         _scriptBuilder.AddRazorComment(scroll.Description);
                         _scriptBuilder.WaitForGump(Constants.SKILLSCROLL_TOME_GUMP_ID);
                         _scriptBuilder.GumpResponse(Constants.SKILLSCROLL_TOME_GUMP_ID, scroll.GumpResponseButtonForTome);
+                        _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, scroll.Description);
                     }
                 }
 
@@ -144,6 +149,7 @@ namespace FaceSplitScripter
                     _scriptBuilder.AddRazorComment(tmap.Description);
                     _scriptBuilder.WaitForGump(Constants.TMAP_TOME_GUMP_ID);
                     _scriptBuilder.GumpResponse(Constants.TMAP_TOME_GUMP_ID, tmap.GumpResponseButtonForTome);
+                    _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, tmap.Description);
                 }
 
                 _scriptBuilder.AddOverhead("Treasure maps done.");
@@ -167,6 +173,7 @@ namespace FaceSplitScripter
                     _scriptBuilder.AddRazorComment(core.Description);
                     _scriptBuilder.WaitForGump(Constants.ASPECT_TOME_GUMP_ID);
                     _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, core.GumpResponseButtonForTome);
+                    _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, core.Description);
                 }
 
                 foreach (ILootItem extract in extracts)
@@ -174,6 +181,7 @@ namespace FaceSplitScripter
                     _scriptBuilder.AddRazorComment(extract.Description);
                     _scriptBuilder.WaitForGump(Constants.ASPECT_TOME_GUMP_ID);
                     _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, extract.GumpResponseButtonForTome);
+                    _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, extract.Description);
                 }
 
                 _scriptBuilder.AddOverhead("Aspect items done.");
@@ -189,5 +197,11 @@ namespace FaceSplitScripter
                 _scriptBuilder.AddManualItem(manualItem.Description);
             }
         }
+
+        private void ProcessMissingItems()
+        {
+            _scriptBuilder.DisplayMissingItems();
+        }
+
     }
 }

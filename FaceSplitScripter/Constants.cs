@@ -15,6 +15,7 @@ namespace FaceSplitScripter
         public const string SKILLSCROLL_TOME_VARIABLE_NAME = "faceSplitScrollTome";
         public const string SKLL_ORB_VARIABLE_NAME = "faceSplitSkillOrb";
         public const string MCD_VARIABLE_NAME = "faceSplitMcd";
+        public const string MISSING_ITEMS_LIST_NAME = "faceSplitMissingList";
 
         // Item Types
         public const string TOME_ITEM_TYPE = "29104";
