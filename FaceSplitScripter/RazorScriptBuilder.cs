@@ -71,7 +71,9 @@ namespace FaceSplitScripter
 
         public void GumpResponse(string gumpId, string response)
         {
+            WaitForGump(gumpId);
             _scriptBuilder.AppendLine($"gumpresponse {response} {gumpId}");
+            WaitForGump(gumpId);
         }
 
         public void GumpClose(string gumpId)
@@ -134,6 +136,12 @@ namespace FaceSplitScripter
             _scriptBuilder.AppendLine($"overhead '{text}' 0");
         }
 
+        public void AddOverheadAndScript(string text)
+        {
+            AddRazorComment(text);
+            AddOverhead(text);
+        }
+
         public void AddManualItem(string text)
         {
             _manualItems.AppendLine(text);
@@ -157,6 +165,42 @@ namespace FaceSplitScripter
             _scriptBuilder.AppendLine($"foreach 'missingItem' in '{Constants.MISSING_ITEMS_LIST_NAME}'");
             _scriptBuilder.AppendLine($"overhead missingItem 38");
             _scriptBuilder.AppendLine($"endfor");
+        }
+
+        internal void CheckInsufficientSkillOrbs(int quantity)
+        {
+            _scriptBuilder.AppendLine($"if not findtype '{Constants.SKILL_ORB_ITEM_NAME}' '{Constants.LOOTSPLIT_CONTAINER_VARIABLE_NAME}' {Constants.SKILL_ORB_HUE} {quantity}");
+            _scriptBuilder.AppendLine($"pushlist '{Constants.MISSING_ITEMS_LIST_NAME}' 'Skill Orb(s)' back");
+            _scriptBuilder.AppendLine($"overhead 'Insufficient Skill Balls!' 38");
+            _scriptBuilder.AppendLine($"endif");
+        }
+
+        internal void CheckInsufficientMCDs(int quantity)
+        {
+            _scriptBuilder.AppendLine($"if not findtype '{Constants.MCD_ITEM_NAME}' '{Constants.LOOTSPLIT_CONTAINER_VARIABLE_NAME}' {Constants.MCD_HUE} {quantity}");
+            _scriptBuilder.AppendLine($"pushlist '{Constants.MISSING_ITEMS_LIST_NAME}' 'MCD(s)' back");
+            _scriptBuilder.AppendLine($"overhead 'Insufficient MCDs!' 38");
+            _scriptBuilder.AppendLine($"endif");
+        }
+
+        internal void PullSkillOrbsToBackpack(int quantity)
+        {
+            _scriptBuilder.AppendLine($"if findtype '{Constants.SKILL_ORB_ITEM_NAME}' '{Constants.LOOTSPLIT_CONTAINER_VARIABLE_NAME}' {Constants.SKILL_ORB_HUE}");
+            LiftSkillOrb(quantity);
+            AddGCDWait();
+            DropOnSelf();
+            AddGCDWait();
+            _scriptBuilder.AppendLine($"endif");
+        }
+
+        internal void PullMCDsToBackpack(int quantity)
+        {
+            _scriptBuilder.AppendLine($"if findtype '{Constants.MCD_ITEM_NAME}' '{Constants.LOOTSPLIT_CONTAINER_VARIABLE_NAME}' {Constants.MCD_HUE}");
+            LiftMCD(quantity);
+            AddGCDWait();
+            DropOnSelf();
+            AddGCDWait();
+            _scriptBuilder.AppendLine($"endif");
         }
     }
 }
