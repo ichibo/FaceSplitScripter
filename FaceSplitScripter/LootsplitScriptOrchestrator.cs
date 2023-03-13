@@ -24,7 +24,7 @@ namespace FaceSplitScripter
         public RazorScriptBuilder CreateRazorMacroFromLootItems(IEnumerable<ILootItem> lootItems)
         {
             // 0. Do script initializations.
-            _scriptBuilder.AddOverhead("-- Target Loot Container --");
+            _scriptBuilder.AddOverhead("-Target Loot Container-");
             _scriptBuilder.InitializeVars();
             _scriptBuilder.GetTargetContainerForScript();
             _scriptBuilder.SetScriptIds();
@@ -45,8 +45,8 @@ namespace FaceSplitScripter
             GenerateTmapsTomeScripts(tmaps);
             GenerateSkillScrollTomeScripts(skillScrolls);
 
+            // 3. Any additional non-scripting steps.
             ProcessManualItems(manualItems);
-
             ProcessMissingItems();
 
             _scriptBuilder.AddOverhead("All loot complete!");
@@ -59,17 +59,14 @@ namespace FaceSplitScripter
             if (skillOrbs.Length > 0)
             {
                 _scriptBuilder.AddGCDWait();
-                _scriptBuilder.AddOverhead("Starting skill orbs...");
-                _scriptBuilder.AddRazorComment("Beginning Skill Orbs");
+                _scriptBuilder.AddOverheadAndScript("Starting skill orbs...");
 
                 int quantity = skillOrbs.Length;
 
-                _scriptBuilder.LiftSkillOrb(quantity);
-                _scriptBuilder.AddGCDWait();
-                _scriptBuilder.DropOnSelf();
-                _scriptBuilder.AddGCDWait();
+                _scriptBuilder.CheckInsufficientSkillOrbs(quantity);
+                _scriptBuilder.PullSkillOrbsToBackpack(quantity);
 
-                _scriptBuilder.AddOverhead("Skill orbs done.");
+                _scriptBuilder.AddOverheadAndScript("Skill orbs done.");
             }
         }
 
@@ -78,17 +75,14 @@ namespace FaceSplitScripter
             if (mcds.Length > 0)
             {
                 _scriptBuilder.AddGCDWait();
-                _scriptBuilder.AddOverhead("Starting MCDs...");
-                _scriptBuilder.AddRazorComment("Beginning MCDs");
+                _scriptBuilder.AddOverheadAndScript("Starting MCDs...");
 
                 int quantity = mcds.Length;
 
-                _scriptBuilder.LiftMCD(quantity);
-                _scriptBuilder.AddGCDWait();
-                _scriptBuilder.DropOnSelf();
-                _scriptBuilder.AddGCDWait();
+                _scriptBuilder.CheckInsufficientMCDs(quantity);
+                _scriptBuilder.PullMCDsToBackpack(quantity);
 
-                _scriptBuilder.AddOverhead("MCDs done.");
+                _scriptBuilder.AddOverheadAndScript("MCDs done.");
             }
         }
 
@@ -97,8 +91,7 @@ namespace FaceSplitScripter
             if (skillScrolls.Count() > 0)
             {
                 _scriptBuilder.AddGCDWait();
-                _scriptBuilder.AddOverhead("Starting skill scrolls...");
-                _scriptBuilder.AddRazorComment("Beginning Skill Scroll Tome");
+                _scriptBuilder.AddOverheadAndScript("Starting skill scrolls...");
                 _scriptBuilder.DoubleClickSkillScrollTome();
                 _scriptBuilder.AddGCDWait();
 
@@ -108,7 +101,6 @@ namespace FaceSplitScripter
                 foreach (ILootItem scroll in pageOneScrolls)
                 {
                     _scriptBuilder.AddRazorComment(scroll.Description);
-                    _scriptBuilder.WaitForGump(Constants.SKILLSCROLL_TOME_GUMP_ID);
                     _scriptBuilder.GumpResponse(Constants.SKILLSCROLL_TOME_GUMP_ID, scroll.GumpResponseButtonForTome);
                     _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, scroll.Description);
                 }
@@ -116,19 +108,17 @@ namespace FaceSplitScripter
                 if (pageTwoScrolls.Length > 0)
                 {
                     _scriptBuilder.AddRazorComment("Skill Scroll Tome Page 2");
-                    _scriptBuilder.WaitForGump(Constants.SKILLSCROLL_TOME_GUMP_ID);
                     _scriptBuilder.GumpResponse(Constants.SKILLSCROLL_TOME_GUMP_ID, Constants.NEXT_PAGE_FOR_SKILLSCROLL_TOME);
 
                     foreach (ILootItem scroll in pageTwoScrolls)
                     {
                         _scriptBuilder.AddRazorComment(scroll.Description);
-                        _scriptBuilder.WaitForGump(Constants.SKILLSCROLL_TOME_GUMP_ID);
                         _scriptBuilder.GumpResponse(Constants.SKILLSCROLL_TOME_GUMP_ID, scroll.GumpResponseButtonForTome);
                         _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, scroll.Description);
                     }
                 }
 
-                _scriptBuilder.AddOverhead("Skill scrolls done.");
+                _scriptBuilder.AddOverheadAndScript("Skill scrolls done.");
                 _scriptBuilder.AddGCDWait();
                 _scriptBuilder.GumpClose(Constants.SKILLSCROLL_TOME_GUMP_ID);
             }
@@ -139,20 +129,18 @@ namespace FaceSplitScripter
             if (tmaps.Count() > 0)
             {
                 _scriptBuilder.AddGCDWait();
-                _scriptBuilder.AddOverhead("Starting treasure maps...");
-                _scriptBuilder.AddRazorComment("Beginning Treasure Map Tome");
+                _scriptBuilder.AddOverheadAndScript("Starting treasure maps...");
                 _scriptBuilder.DoubleClickTreasureMapTome();
                 _scriptBuilder.AddGCDWait();
 
                 foreach (ILootItem tmap in tmaps)
                 {
                     _scriptBuilder.AddRazorComment(tmap.Description);
-                    _scriptBuilder.WaitForGump(Constants.TMAP_TOME_GUMP_ID);
                     _scriptBuilder.GumpResponse(Constants.TMAP_TOME_GUMP_ID, tmap.GumpResponseButtonForTome);
                     _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, tmap.Description);
                 }
 
-                _scriptBuilder.AddOverhead("Treasure maps done.");
+                _scriptBuilder.AddOverheadAndScript("Treasure maps done.");
                 _scriptBuilder.AddGCDWait();
                 _scriptBuilder.GumpClose(Constants.TMAP_TOME_GUMP_ID);
             }
@@ -163,15 +151,13 @@ namespace FaceSplitScripter
             if (extracts.Count() > 0 || cores.Count() > 0)
             {
                 _scriptBuilder.AddGCDWait();
-                _scriptBuilder.AddOverhead("Starting aspect items...");
-                _scriptBuilder.AddRazorComment("Beginning Aspect Tome");
+                _scriptBuilder.AddOverheadAndScript("Starting aspect items...");
                 _scriptBuilder.DoubleClickAspectTome();
                 _scriptBuilder.AddGCDWait();
 
                 foreach (ILootItem core in cores)
                 {
                     _scriptBuilder.AddRazorComment(core.Description);
-                    _scriptBuilder.WaitForGump(Constants.ASPECT_TOME_GUMP_ID);
                     _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, core.GumpResponseButtonForTome);
                     _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, core.Description);
                 }
@@ -179,12 +165,11 @@ namespace FaceSplitScripter
                 foreach (ILootItem extract in extracts)
                 {
                     _scriptBuilder.AddRazorComment(extract.Description);
-                    _scriptBuilder.WaitForGump(Constants.ASPECT_TOME_GUMP_ID);
                     _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, extract.GumpResponseButtonForTome);
                     _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, extract.Description);
                 }
 
-                _scriptBuilder.AddOverhead("Aspect items done.");
+                _scriptBuilder.AddOverheadAndScript("Aspect items done.");
                 _scriptBuilder.AddGCDWait();
                 _scriptBuilder.GumpClose(Constants.ASPECT_TOME_GUMP_ID);
             }
@@ -202,6 +187,5 @@ namespace FaceSplitScripter
         {
             _scriptBuilder.DisplayMissingItems();
         }
-
     }
 }
