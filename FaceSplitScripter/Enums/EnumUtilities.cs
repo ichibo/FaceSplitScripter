@@ -17,6 +17,8 @@ namespace FaceSplitScripter
             { "eldritch", Aspect.Eldritch},
             { "fire", Aspect.Fire},
             { "fortune", Aspect.Fortune},
+            { "gadget", Aspect.Gadget},
+            { "harvest", Aspect.Harvest},
             { "holy", Aspect.Holy},
             { "lyric", Aspect.Lyric},
             { "poison", Aspect.Poison},
