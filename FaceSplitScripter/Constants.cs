@@ -37,6 +37,7 @@ namespace FaceSplitScripter
 
         // Gump specifics
         public const string NEXT_PAGE_FOR_SKILLSCROLL_TOME = "5";
+        public const string NEXT_PAGE_FOR_ASPECT_CORE_TOME = "6";
 
         // Identifiers from the sheet to determine what the loot type is.  Skillscroll is the default.
         public const string CORE_IDENTIFIER = "core";

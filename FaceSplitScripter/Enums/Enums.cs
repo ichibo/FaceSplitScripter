@@ -13,6 +13,8 @@
         Eldritch,
         Fire,
         Fortune,
+        Gadget,
+        Harvest,
         Holy,
         Lyric,
         Poison,

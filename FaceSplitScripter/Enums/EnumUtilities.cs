@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace FaceSplitScripter
 {
@@ -135,6 +136,38 @@ namespace FaceSplitScripter
                 case SkillScroll.Tinkering:
                 case SkillScroll.Tracking:
                 case SkillScroll.Veterinary:
+                    return 2;
+
+                default:
+                    return 1;
+            }
+        }
+
+        public static int GetAspectTomePage(Aspect aspect)
+        {
+            switch (aspect)
+            {
+                case Aspect.Air:
+                case Aspect.Artisan:
+                case Aspect.Blood:
+                case Aspect.Command:
+                case Aspect.Death:
+                case Aspect.Discipline:
+                case Aspect.Earth:
+                case Aspect.Eldritch:
+                case Aspect.Fire:
+                case Aspect.Fortune:
+                case Aspect.Gadget:
+                case Aspect.Harvest:
+                case Aspect.Holy:
+                case Aspect.Lyric:
+                case Aspect.Poison:
+                    return 1;
+
+                case Aspect.Shadow:
+                case Aspect.Void:
+                case Aspect.War:
+                case Aspect.Water:
                     return 2;
 
                 default:

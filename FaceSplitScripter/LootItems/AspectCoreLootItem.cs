@@ -4,7 +4,7 @@
     {
         public LootType LootType { get { return LootType.Core; } }
         public Aspect Aspect { get; private set; }
-        public int TomePage { get { return 1; } }
+        public int TomePage { get { return EnumUtilities.GetAspectTomePage(Aspect); } }
         public string Description { get; private set; }
 
         public AspectCoreLootItem(string description, Aspect aspect)
@@ -20,39 +20,43 @@
                 switch (Aspect)
                 {
                     case Aspect.Air:
-                        return "10";
+                        return "100";
                     case Aspect.Artisan:
-                        return "11";
+                        return "101";
                     case Aspect.Blood:
-                        return "12";
+                        return "102";
                     case Aspect.Command:
-                        return "13";
+                        return "103";
                     case Aspect.Death:
-                        return "14";
+                        return "104";
                     case Aspect.Discipline:
-                        return "15";
+                        return "105";
                     case Aspect.Earth:
-                        return "16";
+                        return "106";
                     case Aspect.Eldritch:
-                        return "17";
+                        return "107";
                     case Aspect.Fire:
-                        return "18";
+                        return "108";
                     case Aspect.Fortune:
-                        return "19";
+                        return "109";
+                    case Aspect.Gadget:
+                        return "110";
+                    case Aspect.Harvest:
+                        return "111";
                     case Aspect.Holy:
-                        return "20";
+                        return "112";
                     case Aspect.Lyric:
-                        return "21";
+                        return "113";
                     case Aspect.Poison:
-                        return "22";
+                        return "114";
                     case Aspect.Shadow:
-                        return "23";
+                        return "100";
                     case Aspect.Void:
-                        return "24";
+                        return "101";
                     case Aspect.War:
-                        return "25";
+                        return "102";
                     case Aspect.Water:
-                        return "26";
+                        return "103";
 
                     default:
                         return "0";

@@ -150,23 +150,50 @@ namespace FaceSplitScripter
         {
             if (extracts.Count() > 0 || cores.Count() > 0)
             {
+
+                ILootItem[] pageOneExtracts = extracts.Where(x => x.TomePage == 1).ToArray();
+                ILootItem[] pageTwoExtracts = extracts.Where(x => x.TomePage == 2).ToArray();
+
+                ILootItem[] pageOneCores = cores.Where(x => x.TomePage == 1).ToArray();
+                ILootItem[] pageTwoCores = cores.Where(x => x.TomePage == 2).ToArray();
+
                 _scriptBuilder.AddGCDWait();
                 _scriptBuilder.AddOverheadAndScript("Starting aspect items...");
                 _scriptBuilder.DoubleClickAspectTome();
                 _scriptBuilder.AddGCDWait();
 
-                foreach (ILootItem core in cores)
+                foreach (ILootItem core in pageOneCores)
                 {
                     _scriptBuilder.AddRazorComment(core.Description);
                     _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, core.GumpResponseButtonForTome);
                     _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, core.Description);
                 }
 
-                foreach (ILootItem extract in extracts)
+                foreach (ILootItem extract in pageOneExtracts)
                 {
                     _scriptBuilder.AddRazorComment(extract.Description);
                     _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, extract.GumpResponseButtonForTome);
                     _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, extract.Description);
+                }
+
+                if (pageTwoExtracts.Length > 0 || pageTwoCores.Length > 0)
+                {
+                    _scriptBuilder.AddRazorComment("Aspect Item Tome Page 2");
+                    _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, Constants.NEXT_PAGE_FOR_ASPECT_CORE_TOME);
+
+                    foreach (ILootItem core in pageTwoCores)
+                    {
+                        _scriptBuilder.AddRazorComment(core.Description);
+                        _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, core.GumpResponseButtonForTome);
+                        _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, core.Description);
+                    }
+
+                    foreach (ILootItem extract in pageTwoExtracts)
+                    {
+                        _scriptBuilder.AddRazorComment(extract.Description);
+                        _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, extract.GumpResponseButtonForTome);
+                        _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, extract.Description);
+                    }
                 }
 
                 _scriptBuilder.AddOverheadAndScript("Aspect items done.");
