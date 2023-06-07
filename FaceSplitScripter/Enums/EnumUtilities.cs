@@ -56,7 +56,6 @@ namespace FaceSplitScripter
             { "peace", SkillScroll.Peacemaking },
             { "poison", SkillScroll.Poisoning },
             { "provo", SkillScroll.Provocation },
-            { "remove", SkillScroll.RemoveTrap },
             { "spirit", SkillScroll.SpiritSpeak },
             { "stealth", SkillScroll.Stealthing },
             { "tailor", SkillScroll.Tailoring },

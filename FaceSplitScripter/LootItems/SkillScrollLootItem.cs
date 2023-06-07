@@ -72,22 +72,20 @@
                         return "14";
                     case SkillScroll.Provocation:
                         return "15";
-                    case SkillScroll.RemoveTrap:
-                        return "16";
                     case SkillScroll.SpiritSpeak:
-                        return "17";
+                        return "16";
                     case SkillScroll.Stealthing:
-                        return "18";
+                        return "17";
                     case SkillScroll.Tailoring:
-                        return "19";
+                        return "18";
                     case SkillScroll.TasteID:
-                        return "20";
+                        return "19";
                     case SkillScroll.Tinkering:
-                        return "21";
+                        return "20";
                     case SkillScroll.Tracking:
-                        return "22";
+                        return "21";
                     case SkillScroll.Veterinary:
-                        return "23";
+                        return "22";
 
                     default:
                         return "0";
