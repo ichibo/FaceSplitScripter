@@ -1,13 +1,13 @@
 ﻿namespace FaceSplitScripter
 {
-    public class AspectExtractLootItem : ILootItem
+    public class AspectDistillLootItem : ILootItem
     {
-        public LootType LootType { get { return LootType.Extract; } }
+        public LootType LootType { get { return LootType.Distill; } }
         public Aspect Aspect { get; private set; }
         public int TomePage { get { return EnumUtilities.GetAspectTomePage(Aspect); } }
         public string Description { get; private set; }
 
-        public AspectExtractLootItem(string description, Aspect aspect)
+        public AspectDistillLootItem(string description, Aspect aspect)
         {
             Description = description;
             Aspect = aspect;
@@ -20,43 +20,43 @@
                 switch (Aspect)
                 {
                     case Aspect.Air:
-                        return "200";
+                        return "100";
                     case Aspect.Artisan:
-                        return "201";
+                        return "101";
                     case Aspect.Blood:
-                        return "202";
+                        return "102";
                     case Aspect.Command:
-                        return "203";
+                        return "103";
                     case Aspect.Death:
-                        return "204";
+                        return "104";
                     case Aspect.Discipline:
-                        return "205";
+                        return "105";
                     case Aspect.Earth:
-                        return "206";
+                        return "106";
                     case Aspect.Eldritch:
-                        return "207";
+                        return "107";
                     case Aspect.Fire:
-                        return "208";
+                        return "108";
                     case Aspect.Fortune:
-                        return "209";
+                        return "109";
                     case Aspect.Gadget:
-                        return "210";
+                        return "110";
                     case Aspect.Harvest:
-                        return "211";
+                        return "111";
                     case Aspect.Holy:
-                        return "212";
+                        return "112";
                     case Aspect.Lyric:
-                        return "213";
+                        return "113";
                     case Aspect.Poison:
-                        return "214";
+                        return "114";
                     case Aspect.Shadow:
-                        return "200";
+                        return "100";
                     case Aspect.Void:
-                        return "201";
+                        return "101";
                     case Aspect.War:
-                        return "202";
+                        return "102";
                     case Aspect.Water:
-                        return "203";
+                        return "103";
 
                     default:
                         return "0";

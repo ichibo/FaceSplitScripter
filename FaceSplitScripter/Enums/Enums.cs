@@ -77,7 +77,7 @@
     public enum LootType
     {
         Core,
-        Extract,
+        Distill,
         SkillScroll,
         TreasureMap,
         MCD,
