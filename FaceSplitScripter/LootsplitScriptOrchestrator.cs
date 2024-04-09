@@ -148,7 +148,7 @@ namespace FaceSplitScripter
 
         private void GenerateAspectTomeScripts(IEnumerable<ILootItem> distills, IEnumerable<ILootItem> cores)
         {
-            // Cores Pg1, Cores Pg2, Dclick,  Distills Pg1, Distills Pg2
+            // Do cores Pg1/Pg2, Close tome if needed, Re-open to reset starting page, then do distills if needed.
             if (cores.Count() > 0)
             {
                 ILootItem[] pageOneCores = cores.Where(x => x.TomePage == 1).ToArray();
@@ -184,7 +184,6 @@ namespace FaceSplitScripter
                 _scriptBuilder.GumpClose(Constants.ASPECT_TOME_GUMP_ID);
             }
 
-            // Cores Pg1, Cores Pg2, Dclick,  Distills Pg1, Distills Pg2
             if (distills.Count() > 0)
             {
                 ILootItem[] pageOneDistills = distills.Where(x => x.TomePage == 1).ToArray();
