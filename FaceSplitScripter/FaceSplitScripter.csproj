@@ -63,7 +63,7 @@
     </ApplicationDefinition>
     <Compile Include="Constants.cs" />
     <Compile Include="LootItems\AspectCoreLootItem.cs" />
-    <Compile Include="LootItems\AspectExtractLootItem.cs" />
+    <Compile Include="LootItems\AspectDistillLootItem.cs" />
     <Compile Include="LootItems\ILootItem.cs" />
     <Compile Include="LootItems\ManualLootItem.cs" />
     <Compile Include="LootItems\MCDLootItem.cs" />

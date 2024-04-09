@@ -32,7 +32,7 @@ namespace FaceSplitScripter
             // 1. Organize into lists by groups.
             ILootItem[] skillOrbs = lootItems.Where(x => x.LootType == LootType.SkillOrb).ToArray();
             ILootItem[] mcds = lootItems.Where(x => x.LootType == LootType.MCD).ToArray();
-            ILootItem[] extracts = lootItems.Where(x => x.LootType == LootType.Extract).ToArray();
+            ILootItem[] distills = lootItems.Where(x => x.LootType == LootType.Distill).ToArray();
             ILootItem[] cores = lootItems.Where(x => x.LootType == LootType.Core).ToArray();
             ILootItem[] tmaps = lootItems.Where(x => x.LootType == LootType.TreasureMap).ToArray();
             ILootItem[] skillScrolls = lootItems.Where(x => x.LootType == LootType.SkillScroll).ToArray();
@@ -41,7 +41,7 @@ namespace FaceSplitScripter
             // 2.Iterate on each item type and build the necessary scripts.
             GenerateSkillOrbScripts(skillOrbs);
             GenerateMCDScripts(mcds);
-            GenerateAspectTomeScripts(extracts, cores);
+            GenerateAspectTomeScripts(distills, cores);
             GenerateTmapsTomeScripts(tmaps);
             GenerateSkillScrollTomeScripts(skillScrolls);
 
@@ -146,19 +146,16 @@ namespace FaceSplitScripter
             }
         }
 
-        private void GenerateAspectTomeScripts(IEnumerable<ILootItem> extracts, IEnumerable<ILootItem> cores)
+        private void GenerateAspectTomeScripts(IEnumerable<ILootItem> distills, IEnumerable<ILootItem> cores)
         {
-            if (extracts.Count() > 0 || cores.Count() > 0)
+            // Do cores Pg1/Pg2, Close tome if needed, Re-open to reset starting page, then do distills if needed.
+            if (cores.Count() > 0)
             {
-
-                ILootItem[] pageOneExtracts = extracts.Where(x => x.TomePage == 1).ToArray();
-                ILootItem[] pageTwoExtracts = extracts.Where(x => x.TomePage == 2).ToArray();
-
                 ILootItem[] pageOneCores = cores.Where(x => x.TomePage == 1).ToArray();
                 ILootItem[] pageTwoCores = cores.Where(x => x.TomePage == 2).ToArray();
 
                 _scriptBuilder.AddGCDWait();
-                _scriptBuilder.AddOverheadAndScript("Starting aspect items...");
+                _scriptBuilder.AddOverheadAndScript("Starting aspect cores...");
                 _scriptBuilder.DoubleClickAspectTome();
                 _scriptBuilder.AddGCDWait();
 
@@ -169,16 +166,9 @@ namespace FaceSplitScripter
                     _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, core.Description);
                 }
 
-                foreach (ILootItem extract in pageOneExtracts)
+                if (pageTwoCores.Length > 0)
                 {
-                    _scriptBuilder.AddRazorComment(extract.Description);
-                    _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, extract.GumpResponseButtonForTome);
-                    _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, extract.Description);
-                }
-
-                if (pageTwoExtracts.Length > 0 || pageTwoCores.Length > 0)
-                {
-                    _scriptBuilder.AddRazorComment("Aspect Item Tome Page 2");
+                    _scriptBuilder.AddRazorComment("Aspect Cores Page 2");
                     _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, Constants.NEXT_PAGE_FOR_ASPECT_CORE_TOME);
 
                     foreach (ILootItem core in pageTwoCores)
@@ -187,16 +177,45 @@ namespace FaceSplitScripter
                         _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, core.GumpResponseButtonForTome);
                         _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, core.Description);
                     }
+                }
 
-                    foreach (ILootItem extract in pageTwoExtracts)
+                _scriptBuilder.AddOverheadAndScript("Aspect cores done.");
+                _scriptBuilder.AddGCDWait();
+                _scriptBuilder.GumpClose(Constants.ASPECT_TOME_GUMP_ID);
+            }
+
+            if (distills.Count() > 0)
+            {
+                ILootItem[] pageOneDistills = distills.Where(x => x.TomePage == 1).ToArray();
+                ILootItem[] pageTwoDistills = distills.Where(x => x.TomePage == 2).ToArray();
+
+                _scriptBuilder.AddGCDWait();
+                _scriptBuilder.AddOverheadAndScript("Starting aspect distills...");
+                _scriptBuilder.DoubleClickAspectTome();
+                _scriptBuilder.AddGCDWait();
+                _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, Constants.NEXT_ITEM_TYPE_PAGE_FOR_ASPECT_CORE_TOME);
+
+                foreach (ILootItem distill in pageOneDistills)
+                {
+                    _scriptBuilder.AddRazorComment(distill.Description);
+                    _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, distill.GumpResponseButtonForTome);
+                    _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, distill.Description);
+                }
+
+                if (pageTwoDistills.Length > 0)
+                {
+                    _scriptBuilder.AddRazorComment("Aspect Distills Page 2");
+                    _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, Constants.NEXT_PAGE_FOR_ASPECT_CORE_TOME);
+
+                    foreach (ILootItem distill in pageTwoDistills)
                     {
-                        _scriptBuilder.AddRazorComment(extract.Description);
-                        _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, extract.GumpResponseButtonForTome);
-                        _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, extract.Description);
+                        _scriptBuilder.AddRazorComment(distill.Description);
+                        _scriptBuilder.GumpResponse(Constants.ASPECT_TOME_GUMP_ID, distill.GumpResponseButtonForTome);
+                        _scriptBuilder.AddMissingItemCheck(MISSING_OBJECT_TEXT_STRING, distill.Description);
                     }
                 }
 
-                _scriptBuilder.AddOverheadAndScript("Aspect items done.");
+                _scriptBuilder.AddOverheadAndScript("Aspect distills done.");
                 _scriptBuilder.AddGCDWait();
                 _scriptBuilder.GumpClose(Constants.ASPECT_TOME_GUMP_ID);
             }

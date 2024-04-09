@@ -73,7 +73,7 @@ namespace FaceSplitScripter
                 {
                     for (int i = 0; i < itemCount; i++)
                     {
-                        items.Add(new AspectExtractLootItem(processedDescription, aspect));
+                        items.Add(new AspectDistillLootItem(processedDescription, aspect));
                     }
                 }
             }
