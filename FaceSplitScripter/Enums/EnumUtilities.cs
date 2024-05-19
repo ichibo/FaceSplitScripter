@@ -203,6 +203,8 @@ namespace FaceSplitScripter
                     return TreasureMapLevel.Level5;
                 case "6":
                     return TreasureMapLevel.Level6;
+                case "7":
+                    return TreasureMapLevel.Level7;
 
                 default:
                     return TreasureMapLevel.None;

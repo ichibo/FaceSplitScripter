@@ -55,6 +55,7 @@ namespace FaceSplitScripter
 
             else
             {
+                // Each instance has the quantity present so just pull the first item.
                 manualItems = manualItems.Concat(skillOrbs.Take(1)).Concat(mcds.Take(1)).Concat(chromaticCores.Take(1)).Concat(chromaticDistills.Take(1)).ToArray();
             }
 

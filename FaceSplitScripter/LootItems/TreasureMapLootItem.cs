@@ -31,6 +31,8 @@
                         return "14";
                     case TreasureMapLevel.Level6:
                         return "15";
+                    case TreasureMapLevel.Level7:
+                        return "16";
 
                     default:
                         return "0";

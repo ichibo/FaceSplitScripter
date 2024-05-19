@@ -16,7 +16,7 @@ namespace FaceSplitScripter
             InitializeComponent();
             ResetButtonText();
 
-            checkBox_pullNonTomeItems.IsChecked = true;
+            checkBox_pullNonTomeItems.IsChecked = false;
         }
 
         private void LootsplitText_TextChanged(object sender, TextChangedEventArgs e)
