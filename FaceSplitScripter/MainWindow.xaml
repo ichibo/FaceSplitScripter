@@ -5,11 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FaceSplitScripter"
         mc:Ignorable="d"
-        Title="[-_-] Lootsplit Script Generator" Height="400" Width="500"
+        Title="[-_-] Lootsplit Script Generator" Height="430" Width="500"
         Background="DarkRed">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
             <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
@@ -19,21 +20,30 @@
         </Grid.ColumnDefinitions>
 
         <Label FontWeight="Bold" Grid.Column="0" Grid.Row="0">Paste Lootsplit Text:</Label>
-        <TextBox TextChanged="LootsplitText_TextChanged" Grid.Column="1" Grid.Row="0" Height="20" HorizontalAlignment="Stretch" Margin="5"/>
-        
-        <Label FontWeight="Bold" Grid.Column="0" Grid.Row="1" >Razor Script:</Label>
-        <TextBox Grid.Column="1" Grid.Row="1" Name="textBox_RazorScript" IsReadOnly="true" Margin="5" VerticalScrollBarVisibility="Auto"></TextBox>
-        <Button Name="button_razorScript" Grid.Column="0" Grid.Row="1" Height="25" Width="110" VerticalAlignment="Top" Margin="5,25,5,5" Content="Copy to Clipboard" Click="button_razorScriptClick" >
+        <TextBox Name="textBox_lootsplitText" TextChanged="LootsplitText_TextChanged" Grid.Column="1" Grid.Row="0" Height="20" HorizontalAlignment="Stretch" Margin="5"/>
+
+        <CheckBox Name="checkBox_pullNonTomeItems" Grid.Column="1" Grid.Row="1" Margin="5,0,0,0">Pull Non-Tome Items</CheckBox>
+
+        <Label FontWeight="Bold" Grid.Column="0" Grid.Row="2" >Razor Script:</Label>
+        <TextBox Grid.Column="1" Grid.Row="2" Name="textBox_RazorScript" IsReadOnly="true" Margin="5" VerticalScrollBarVisibility="Auto"></TextBox>
+        <Button Name="button_razorScript" Grid.Column="0" Grid.Row="2" Height="25" Width="110" VerticalAlignment="Top" Margin="5,25,5,5" Content="Copy to Clipboard" Click="button_razorScriptClick" >
             <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="5"/>
                     </Style>
-                </Button.Resources>
-            </Button>
+            </Button.Resources>
+        </Button>
         
-        <Label FontWeight="Bold" Grid.Column="0" Grid.Row="2">Manual Items:</Label>
-        <TextBox Grid.Column="1" Grid.Row="2" Name="textBox_ManualItems" IsReadOnly="true" Margin="5" VerticalScrollBarVisibility="Auto"></TextBox>
-        <Button Name="button_manualItems" Grid.Column="0" Grid.Row="2" Height="25" Width="110" VerticalAlignment="Top" Margin="5,25,5,5" Content="Copy to Clipboard" Click="button_manualItemsClick" >
+        <Label FontWeight="Bold" Grid.Column="0" Grid.Row="3">Manual Items:</Label>
+        <TextBox Grid.Column="1" Grid.Row="3" Name="textBox_ManualItems" IsReadOnly="true" Margin="5" VerticalScrollBarVisibility="Auto"></TextBox>
+        <Button Name="button_manualItems" Grid.Column="0" Grid.Row="3" Height="25" Width="110" VerticalAlignment="Top" Margin="5,25,5,5" Content="Copy to Clipboard" Click="button_manualItemsClick" >
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        <Button Name="button_clear" Grid.Column="0" Grid.Row="3" Height="25" Width="110" VerticalAlignment="Bottom" Margin="5,25,5,5" Content="Clear All" Click="button_clear_Click" >
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>

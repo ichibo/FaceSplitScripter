@@ -66,8 +66,14 @@
     <Compile Include="LootItems\AspectDistillLootItem.cs" />
     <Compile Include="LootItems\ILootItem.cs" />
     <Compile Include="LootItems\ManualLootItem.cs" />
+    <Compile Include="LootItems\ChromaticCoreLootItem.cs" />
+    <Compile Include="LootItems\ChromaticDistillLootItem.cs" />
     <Compile Include="LootItems\MCDLootItem.cs" />
+    <Compile Include="LootItems\ResourceMapFishingLootItem.cs" />
     <Compile Include="LootItems\SkillOrbLootItem.cs" />
+    <Compile Include="LootItems\ResourceMapSkinningLootIem.cs" />
+    <Compile Include="LootItems\ResourceMapMiningLootIem.cs" />
+    <Compile Include="LootItems\ResourceMapLumberLootIem.cs" />
     <Compile Include="LootTextParser.cs" />
     <Compile Include="RazorScriptBuilder.cs" />
     <Compile Include="LootItems\SkillScrollLootItem.cs" />

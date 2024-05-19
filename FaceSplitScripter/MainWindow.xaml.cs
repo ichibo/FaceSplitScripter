@@ -15,6 +15,8 @@ namespace FaceSplitScripter
         {
             InitializeComponent();
             ResetButtonText();
+
+            checkBox_pullNonTomeItems.IsChecked = true;
         }
 
         private void LootsplitText_TextChanged(object sender, TextChangedEventArgs e)
@@ -29,7 +31,8 @@ namespace FaceSplitScripter
                 try
                 {
                     var converter = new LootsplitScriptOrchestrator();
-                    var result = converter.ConvertLootsplitTextToRazorMacro(newText);
+                    var handleNonTomeItems = checkBox_pullNonTomeItems.IsChecked ?? true;
+                    var result = converter.ConvertLootsplitTextToRazorMacro(newText, handleNonTomeItems);
 
                     textBox_RazorScript.Text = result.GetScript();
                     textBox_ManualItems.Text = result.GetManualItems();
@@ -65,6 +68,12 @@ namespace FaceSplitScripter
             Button clickedButton = sender as Button;
             clickedButton.Content = "Copied!";
             Clipboard.SetText(textBox_RazorScript.Text);
+        }
+
+        private void button_clear_Click(object sender, RoutedEventArgs e)
+        {
+            ResetButtonText();
+            textBox_lootsplitText.Text = "";
         }
     }
 }
