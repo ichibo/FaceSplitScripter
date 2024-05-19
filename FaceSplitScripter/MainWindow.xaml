@@ -22,7 +22,7 @@
         <Label FontWeight="Bold" Grid.Column="0" Grid.Row="0">Paste Lootsplit Text:</Label>
         <TextBox Name="textBox_lootsplitText" TextChanged="LootsplitText_TextChanged" Grid.Column="1" Grid.Row="0" Height="20" HorizontalAlignment="Stretch" Margin="5"/>
 
-        <CheckBox Name="checkBox_pullNonTomeItems" Grid.Column="1" Grid.Row="1" Margin="5,0,0,0">Pull Non-Tome Items</CheckBox>
+        <CheckBox Name="checkBox_pullNonTomeItems" Grid.Column="1" Grid.Row="1" Margin="5,0,0,0" Checked="checkBox_pullNonTomeItems_Checked" Unchecked="checkBox_pullNonTomeItems_Checked">Pull Non-Tome Items</CheckBox>
 
         <Label FontWeight="Bold" Grid.Column="0" Grid.Row="2" >Razor Script:</Label>
         <TextBox Grid.Column="1" Grid.Row="2" Name="textBox_RazorScript" IsReadOnly="true" Margin="5" VerticalScrollBarVisibility="Auto"></TextBox>

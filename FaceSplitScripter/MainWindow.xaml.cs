@@ -25,29 +25,7 @@ namespace FaceSplitScripter
             string newText = senderObject.Text;
 
             ResetButtonText();
-
-            if (newText.Trim() != string.Empty)
-            {
-                try
-                {
-                    var converter = new LootsplitScriptOrchestrator();
-                    var handleNonTomeItems = checkBox_pullNonTomeItems.IsChecked ?? true;
-                    var result = converter.ConvertLootsplitTextToRazorMacro(newText, handleNonTomeItems);
-
-                    textBox_RazorScript.Text = result.GetScript();
-                    textBox_ManualItems.Text = result.GetManualItems();
-                }
-                catch
-                {
-                    textBox_RazorScript.Text = "Unable to parse... Try pasting again.";
-                }
-            }
-
-            else
-            {
-                textBox_RazorScript.Text = "...";
-                textBox_ManualItems.Text = "...";
-            }
+            RunLootSplitParser(newText);
         }
 
         private void ResetButtonText()
@@ -59,21 +37,52 @@ namespace FaceSplitScripter
         private void button_manualItemsClick(object sender, RoutedEventArgs e)
         {
             Button clickedButton = sender as Button;
+            Clipboard.SetDataObject(textBox_ManualItems.Text);
             clickedButton.Content = "Copied!";
-            Clipboard.SetText(textBox_ManualItems.Text);
         }
 
         private void button_razorScriptClick(object sender, RoutedEventArgs e)
         {
             Button clickedButton = sender as Button;
+
+            Clipboard.SetDataObject(textBox_RazorScript.Text);
             clickedButton.Content = "Copied!";
-            Clipboard.SetText(textBox_RazorScript.Text);
         }
 
         private void button_clear_Click(object sender, RoutedEventArgs e)
         {
             ResetButtonText();
             textBox_lootsplitText.Text = "";
+        }
+
+        private void checkBox_pullNonTomeItems_Checked(object sender, RoutedEventArgs e)
+        {
+            RunLootSplitParser(textBox_lootsplitText.Text);
+        }
+
+        private void RunLootSplitParser(string text)
+        {
+            if (text.Trim() != string.Empty)
+            {
+                try
+                {
+                    var converter = new LootsplitScriptOrchestrator();
+                    var handleNonTomeItems = checkBox_pullNonTomeItems.IsChecked ?? true;
+                    var result = converter.ConvertLootsplitTextToRazorMacro(text, handleNonTomeItems);
+
+                    textBox_RazorScript.Text = result.GetScript();
+                    textBox_ManualItems.Text = result.GetManualItems();
+                }
+                catch
+                {
+                    textBox_RazorScript.Text = "Unable to parse... Try pasting again.";
+                }
+            }
+            else
+            {
+                textBox_RazorScript.Text = "...";
+                textBox_ManualItems.Text = "...";
+            }
         }
     }
 }
