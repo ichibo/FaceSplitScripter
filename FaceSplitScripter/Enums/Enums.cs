@@ -4,6 +4,7 @@
     {
         None,
         Air,
+        Arcane,
         Artisan,
         Blood,
         Command,
@@ -12,11 +13,14 @@
         Earth,
         Eldritch,
         Fire,
+        Frost,
         Fortune,
         Gadget,
         Harvest,
         Holy,
+        Lightning,
         Lyric,
+        Madness,
         Poison,
         Shadow,
         Void,
@@ -71,7 +75,8 @@
         Level3,
         Level4,
         Level5,
-        Level6
+        Level6,
+        Level7
     }
 
     public enum LootType
@@ -82,6 +87,26 @@
         TreasureMap,
         MCD,
         SkillOrb,
+        ChromaticCore,
+        ChromaticDistill,
+        ResourceMapFishing,
+        ResourceMapMining,
+        ResourceMapLumber,
+        ResourceMapSkinning,
         Manual
+    }
+
+    public enum ResourceType
+    {
+        Normal,
+        Dull,
+        Shadow,
+        Copper,
+        Bronze,
+        Gold,
+        Rose,
+        Ver,
+        Val,
+        Ava
     }
 }

@@ -34,9 +34,15 @@ namespace FaceSplitScripter
             _scriptBuilder.AppendLine($"unsetvar '{Constants.ASPECT_TOME_VARIABLE_NAME}'");
             _scriptBuilder.AppendLine($"unsetvar '{Constants.SKILLSCROLL_TOME_VARIABLE_NAME}'");
 
-            _scriptBuilder.AppendLine($"unsetvar '{Constants.SKLL_ORB_VARIABLE_NAME}'");
-            _scriptBuilder.AppendLine($"unsetvar '{Constants.MCD_VARIABLE_NAME}'");
+            foreach (var nonTomeItems in NonTomeItemDetails.GetAllItems())
+            {
+                _scriptBuilder.AppendLine($"unsetvar '{nonTomeItems.VariableName}'");
+            }
 
+            _scriptBuilder.AppendLine($"unsetvar '{Constants.FISHING_TOME_VARIABLE_NAME}'");
+            _scriptBuilder.AppendLine($"unsetvar '{Constants.LUMBER_TOME_VARIABLE_NAME}'");
+            _scriptBuilder.AppendLine($"unsetvar '{Constants.ORE_TOME_VARIABLE_NAME}'");
+            _scriptBuilder.AppendLine($"unsetvar '{Constants.SKINNING_TOME_VARIABLE_NAME}'");
 
             _scriptBuilder.AppendLine($"removelist {Constants.MISSING_ITEMS_LIST_NAME}");
             _scriptBuilder.AppendLine($"createlist {Constants.MISSING_ITEMS_LIST_NAME}");
@@ -44,9 +50,9 @@ namespace FaceSplitScripter
             _scriptBuilder.AppendLine($"clearsysmsg");
         }
 
-        public void DoubleClickTreasureMapTome()
+        public void DoubleClickByVariableName(string variableName)
         {
-            _scriptBuilder.AppendLine($"dclick '{Constants.TREASURE_MAP_TOME_VARIABLE_NAME}'");
+            _scriptBuilder.AppendLine($"dclick '{variableName}'");
         }
 
         public void DoubleClickAspectTome()
@@ -90,35 +96,35 @@ namespace FaceSplitScripter
 
         public void SetScriptIds()
         {
-            _scriptBuilder.AppendLine($"if findtype '{Constants.TOME_ITEM_TYPE}' '{Constants.LOOTSPLIT_CONTAINER_VARIABLE_NAME}' '{Constants.ASPECT_TOME_HUE}' as tempVariableA");
-            _scriptBuilder.AppendLine($"setvar '{Constants.ASPECT_TOME_VARIABLE_NAME}' tempVariableA");
-            _scriptBuilder.AppendLine($"endif");
+            SetVariableForTopContainerByTypeAndHue(Constants.TOME_ITEM_TYPE, Constants.ASPECT_TOME_HUE, Constants.ASPECT_TOME_VARIABLE_NAME);
+            SetVariableForTopContainerByTypeAndHue(Constants.TOME_ITEM_TYPE, Constants.TMAP_TOME_HUE, Constants.TREASURE_MAP_TOME_VARIABLE_NAME);
+            SetVariableForTopContainerByTypeAndHue(Constants.TOME_ITEM_TYPE, Constants.SKILLSCROLL_TOME_HUE, Constants.SKILLSCROLL_TOME_VARIABLE_NAME);
+            SetVariableForTopContainerByTypeAndHue(Constants.TOME_ITEM_TYPE, Constants.LUMBER_TOME_HUE, Constants.LUMBER_TOME_VARIABLE_NAME);
+            SetVariableForTopContainerByTypeAndHue(Constants.TOME_ITEM_TYPE, Constants.ORE_TOME_HUE, Constants.ORE_TOME_VARIABLE_NAME);
+            SetVariableForTopContainerByTypeAndHue(Constants.TOME_ITEM_TYPE, Constants.SKINNING_TOME_HUE, Constants.SKINNING_TOME_VARIABLE_NAME);
+            SetVariableForTopContainerByTypeAndHue(Constants.TOME_ITEM_TYPE, Constants.FISHING_TOME_HUE, Constants.FISHING_TOME_VARIABLE_NAME);
 
-            _scriptBuilder.AppendLine($"if findtype '{Constants.TOME_ITEM_TYPE}' '{Constants.LOOTSPLIT_CONTAINER_VARIABLE_NAME}' '{Constants.TMAP_TOME_HUE}' as tempVariableB");
-            _scriptBuilder.AppendLine($"setvar '{Constants.TREASURE_MAP_TOME_VARIABLE_NAME}' tempVariableB");
-            _scriptBuilder.AppendLine($"endif");
+            foreach (var nonTomeItems in NonTomeItemDetails.GetAllItems())
+            {
+                SetVariableForTopContainerByNonTomeItemDetails(nonTomeItems);
+            }
+        }
 
-            _scriptBuilder.AppendLine($"if findtype '{Constants.TOME_ITEM_TYPE}' '{Constants.LOOTSPLIT_CONTAINER_VARIABLE_NAME}' '{Constants.SKILLSCROLL_TOME_HUE}' as tempVariableC");
-            _scriptBuilder.AppendLine($"setvar '{Constants.SKILLSCROLL_TOME_VARIABLE_NAME}' tempVariableC");
-            _scriptBuilder.AppendLine($"endif");
-
-            _scriptBuilder.AppendLine($"if findtype '{Constants.SKILL_ORB_ITEM_TYPE}' '{Constants.LOOTSPLIT_CONTAINER_VARIABLE_NAME}' as tempVariableD");
-            _scriptBuilder.AppendLine($"setvar '{Constants.SKLL_ORB_VARIABLE_NAME}' tempVariableD");
-            _scriptBuilder.AppendLine($"endif");
-
-            _scriptBuilder.AppendLine($"if findtype '{Constants.MCD_ITEM_TYPE}' '{Constants.LOOTSPLIT_CONTAINER_VARIABLE_NAME}' as tempVariableE");
-            _scriptBuilder.AppendLine($"setvar '{Constants.MCD_VARIABLE_NAME}' tempVariableE");
+        private void SetVariableForTopContainerByTypeAndHue(string type, string hue, string variableName)
+        {
+            _scriptBuilder.AppendLine($"if findtype '{type}' '{Constants.LOOTSPLIT_CONTAINER_VARIABLE_NAME}' '{hue}' as tempVariable");
+            _scriptBuilder.AppendLine($"setvar '{variableName}' tempVariable");
             _scriptBuilder.AppendLine($"endif");
         }
 
-        public void LiftSkillOrb(int quantity)
+        private void SetVariableForTopContainerByNonTomeItemDetails(INonTomeItemDetails nonTomeItemDetails)
         {
-            _scriptBuilder.AppendLine($"lift '{Constants.SKLL_ORB_VARIABLE_NAME}' {quantity}");
+            SetVariableForTopContainerByTypeAndHue(nonTomeItemDetails.ItemType, nonTomeItemDetails.Hue, nonTomeItemDetails.VariableName);
         }
 
-        public void LiftMCD(int quantity)
+        public void LiftItemByVariableName(string variableName, int quantity)
         {
-            _scriptBuilder.AppendLine($"lift '{Constants.MCD_VARIABLE_NAME}' {quantity}");
+            _scriptBuilder.AppendLine($"lift '{variableName}' {quantity}");
         }
 
         public void DropOnSelf()
@@ -167,36 +173,18 @@ namespace FaceSplitScripter
             _scriptBuilder.AppendLine($"endfor");
         }
 
-        internal void CheckInsufficientSkillOrbs(int quantity)
+        internal void CheckInsufficientItemsInTopContainerByItemNameHue(string itemName, string hue, string description, int quantity)
         {
-            _scriptBuilder.AppendLine($"if not findtype '{Constants.SKILL_ORB_ITEM_NAME}' '{Constants.LOOTSPLIT_CONTAINER_VARIABLE_NAME}' {Constants.SKILL_ORB_HUE} {quantity}");
-            _scriptBuilder.AppendLine($"pushlist '{Constants.MISSING_ITEMS_LIST_NAME}' 'Skill Orb(s)' back");
-            _scriptBuilder.AppendLine($"overhead 'Insufficient Skill Balls!' 38");
+            _scriptBuilder.AppendLine($"if not findtype '{itemName}' '{Constants.LOOTSPLIT_CONTAINER_VARIABLE_NAME}' {hue} {quantity}");
+            _scriptBuilder.AppendLine($"pushlist '{Constants.MISSING_ITEMS_LIST_NAME}' '{description}(s)' back");
+            _scriptBuilder.AppendLine($"overhead 'Insufficient {description}!' 38");
             _scriptBuilder.AppendLine($"endif");
         }
 
-        internal void CheckInsufficientMCDs(int quantity)
+        internal void PullItemToBackpackFromTopContainerByItemNameVariableNameHue(string itemName, string hue, string variableName, int quantity)
         {
-            _scriptBuilder.AppendLine($"if not findtype '{Constants.MCD_ITEM_NAME}' '{Constants.LOOTSPLIT_CONTAINER_VARIABLE_NAME}' {Constants.MCD_HUE} {quantity}");
-            _scriptBuilder.AppendLine($"pushlist '{Constants.MISSING_ITEMS_LIST_NAME}' 'MCD(s)' back");
-            _scriptBuilder.AppendLine($"overhead 'Insufficient MCDs!' 38");
-            _scriptBuilder.AppendLine($"endif");
-        }
-
-        internal void PullSkillOrbsToBackpack(int quantity)
-        {
-            _scriptBuilder.AppendLine($"if findtype '{Constants.SKILL_ORB_ITEM_NAME}' '{Constants.LOOTSPLIT_CONTAINER_VARIABLE_NAME}' {Constants.SKILL_ORB_HUE}");
-            LiftSkillOrb(quantity);
-            AddGCDWait();
-            DropOnSelf();
-            AddGCDWait();
-            _scriptBuilder.AppendLine($"endif");
-        }
-
-        internal void PullMCDsToBackpack(int quantity)
-        {
-            _scriptBuilder.AppendLine($"if findtype '{Constants.MCD_ITEM_NAME}' '{Constants.LOOTSPLIT_CONTAINER_VARIABLE_NAME}' {Constants.MCD_HUE}");
-            LiftMCD(quantity);
+            _scriptBuilder.AppendLine($"if findtype '{itemName}' '{Constants.LOOTSPLIT_CONTAINER_VARIABLE_NAME}' {hue}");
+            LiftItemByVariableName(variableName, quantity);
             AddGCDWait();
             DropOnSelf();
             AddGCDWait();

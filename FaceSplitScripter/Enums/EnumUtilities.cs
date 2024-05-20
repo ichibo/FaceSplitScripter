@@ -8,6 +8,7 @@ namespace FaceSplitScripter
         public static Dictionary<string, Aspect> AspectStringMapping = new Dictionary<string, Aspect>
         {
             { "air", Aspect.Air},
+            { "arcane", Aspect.Arcane},
             { "artisan", Aspect.Artisan},
             { "blood", Aspect.Blood},
             { "command", Aspect.Command},
@@ -17,10 +18,13 @@ namespace FaceSplitScripter
             { "eldritch", Aspect.Eldritch},
             { "fire", Aspect.Fire},
             { "fortune", Aspect.Fortune},
+            { "frost", Aspect.Frost},
             { "gadget", Aspect.Gadget},
             { "harvest", Aspect.Harvest},
             { "holy", Aspect.Holy},
+            { "lightning", Aspect.Lightning},
             { "lyric", Aspect.Lyric},
+            { "madness", Aspect.Madness},
             { "poison", Aspect.Poison},
             { "shadow", Aspect.Shadow},
             { "void", Aspect.Void},
@@ -149,6 +153,7 @@ namespace FaceSplitScripter
             switch (aspect)
             {
                 case Aspect.Air:
+                case Aspect.Arcane:
                 case Aspect.Artisan:
                 case Aspect.Blood:
                 case Aspect.Command:
@@ -158,13 +163,16 @@ namespace FaceSplitScripter
                 case Aspect.Eldritch:
                 case Aspect.Fire:
                 case Aspect.Fortune:
+                case Aspect.Frost:
                 case Aspect.Gadget:
                 case Aspect.Harvest:
                 case Aspect.Holy:
-                case Aspect.Lyric:
-                case Aspect.Poison:
                     return 1;
 
+                case Aspect.Lightning:
+                case Aspect.Lyric:
+                case Aspect.Madness:
+                case Aspect.Poison:
                 case Aspect.Shadow:
                 case Aspect.Void:
                 case Aspect.War:
@@ -195,10 +203,54 @@ namespace FaceSplitScripter
                     return TreasureMapLevel.Level5;
                 case "6":
                     return TreasureMapLevel.Level6;
+                case "7":
+                    return TreasureMapLevel.Level7;
 
                 default:
                     return TreasureMapLevel.None;
             }
+        }
+
+        public static ResourceType GetResourceTypeFromText(string text)
+        {
+            if (text.ToLower().Contains("dull"))
+            {
+                return ResourceType.Dull;
+            }
+            else if (text.ToLower().Contains("shadow"))
+            {
+                return ResourceType.Shadow;
+            }
+            else if (text.ToLower().Contains("copper"))
+            {
+                return ResourceType.Copper;
+            }
+            else if (text.ToLower().Contains("bronze"))
+            {
+                return ResourceType.Bronze;
+            }
+            else if (text.ToLower().Contains("gold"))
+            {
+                return ResourceType.Gold;
+            }
+            else if (text.ToLower().Contains("rose") || text.ToLower().Contains("aga"))
+            {
+                return ResourceType.Rose;
+            }
+            else if (text.ToLower().Contains("ver"))
+            {
+                return ResourceType.Ver;
+            }
+            else if (text.ToLower().Contains("val"))
+            {
+                return ResourceType.Val;
+            }
+            else if (text.ToLower().Contains("avar"))
+            {
+                return ResourceType.Ava;
+            }
+
+            return ResourceType.Normal;
         }
     }
 }

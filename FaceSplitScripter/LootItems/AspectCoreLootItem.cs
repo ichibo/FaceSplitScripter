@@ -21,42 +21,50 @@
                 {
                     case Aspect.Air:
                         return "100";
+                    case Aspect.Arcane:
+                        return "101";
                     case Aspect.Artisan:
-                        return "101";
+                        return "102";
                     case Aspect.Blood:
-                        return "102";
+                        return "103";
                     case Aspect.Command:
-                        return "103";
-                    case Aspect.Death:
                         return "104";
-                    case Aspect.Discipline:
+                    case Aspect.Death:
                         return "105";
-                    case Aspect.Earth:
+                    case Aspect.Discipline:
                         return "106";
-                    case Aspect.Eldritch:
+                    case Aspect.Earth:
                         return "107";
-                    case Aspect.Fire:
+                    case Aspect.Eldritch:
                         return "108";
-                    case Aspect.Fortune:
+                    case Aspect.Fire:
                         return "109";
-                    case Aspect.Gadget:
+                    case Aspect.Fortune:
                         return "110";
-                    case Aspect.Harvest:
+                    case Aspect.Frost:
                         return "111";
-                    case Aspect.Holy:
+                    case Aspect.Gadget:
                         return "112";
-                    case Aspect.Lyric:
+                    case Aspect.Harvest:
                         return "113";
-                    case Aspect.Poison:
+                    case Aspect.Holy:
                         return "114";
-                    case Aspect.Shadow:
+                    case Aspect.Lightning:
                         return "100";
-                    case Aspect.Void:
+                    case Aspect.Lyric:
                         return "101";
-                    case Aspect.War:
+                    case Aspect.Madness:
                         return "102";
-                    case Aspect.Water:
+                    case Aspect.Poison:
                         return "103";
+                    case Aspect.Shadow:
+                        return "104";
+                    case Aspect.Void:
+                        return "105";
+                    case Aspect.War:
+                        return "106";
+                    case Aspect.Water:
+                        return "107";
 
                     default:
                         return "0";

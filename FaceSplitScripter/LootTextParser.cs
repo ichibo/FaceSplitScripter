@@ -52,6 +52,22 @@ namespace FaceSplitScripter
                 }
             }
 
+            else if (lowercaseText.Contains(Constants.CHROMATIC_IDENTIFIER) && lowercaseText.Contains(Constants.CORE_IDENTIFIER))
+            {
+                for (int i = 0; i < itemCount; i++)
+                {
+                    items.Add(new ChromaticCoreLootItem(processedDescription));
+                }
+            }
+
+            else if (lowercaseText.Contains(Constants.CHROMATIC_IDENTIFIER) && (lowercaseText.Contains(Constants.EXTRACT_IDENTIFIER) || lowercaseText.Contains(Constants.DISTILL_IDENTIFIER)))
+            {
+                for (int i = 0; i < itemCount; i++)
+                {
+                    items.Add(new ChromaticDistillLootItem(processedDescription));
+                }
+            }
+
             else if (lowercaseText.Contains(Constants.CORE_IDENTIFIER))
             {
                 Aspect aspect = EnumUtilities.GetAspectFromText(lowercaseText);
@@ -65,7 +81,7 @@ namespace FaceSplitScripter
                 }
             }
 
-            else if (lowercaseText.Contains(Constants.EXTRACT_IDENTIFIER))
+            else if (lowercaseText.Contains(Constants.EXTRACT_IDENTIFIER) || lowercaseText.Contains(Constants.DISTILL_IDENTIFIER))
             {
                 Aspect aspect = EnumUtilities.GetAspectFromText(lowercaseText);
 
@@ -87,6 +103,58 @@ namespace FaceSplitScripter
                     for (int i = 0; i < itemCount; i++)
                     {
                         items.Add(new TreasureMapLootItem(processedDescription, tmapLevel));
+                    }
+                }
+            }
+
+            else if (text.ToLower().Contains(Constants.LUMBER_MAP_IDENTIFIER))
+            {
+                ResourceType resourceType = EnumUtilities.GetResourceTypeFromText(lowercaseText);
+
+                if (resourceType != ResourceType.Normal)
+                {
+                    for (int i = 0; i < itemCount; i++)
+                    {
+                        items.Add(new ResourceMapLumberLootItem(processedDescription, resourceType));
+                    }
+                }
+            }
+
+            else if (text.ToLower().Contains(Constants.MINING_MAP_IDENTIFIER))
+            {
+                ResourceType resourceType = EnumUtilities.GetResourceTypeFromText(lowercaseText);
+
+                if (resourceType != ResourceType.Normal)
+                {
+                    for (int i = 0; i < itemCount; i++)
+                    {
+                        items.Add(new ResourceMapMiningLootItem(processedDescription, resourceType));
+                    }
+                }
+            }
+
+            else if (text.ToLower().Contains(Constants.SKINNING_MAP_IDENTIFIER))
+            {
+                ResourceType resourceType = EnumUtilities.GetResourceTypeFromText(lowercaseText);
+
+                if (resourceType != ResourceType.Normal)
+                {
+                    for (int i = 0; i < itemCount; i++)
+                    {
+                        items.Add(new ResourceMapSkinningLootItem(processedDescription, resourceType));
+                    }
+                }
+            }
+
+            else if (text.ToLower().Contains(Constants.FISHING_MAP_IDENTIFIER))
+            {
+                ResourceType resourceType = EnumUtilities.GetResourceTypeFromText(lowercaseText);
+
+                if (resourceType != ResourceType.Normal)
+                {
+                    for (int i = 0; i < itemCount; i++)
+                    {
+                        items.Add(new ResourceMapFishingLootItem(processedDescription, resourceType));
                     }
                 }
             }
