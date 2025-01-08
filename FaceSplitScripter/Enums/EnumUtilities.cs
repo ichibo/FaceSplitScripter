@@ -34,39 +34,39 @@ namespace FaceSplitScripter
 
         public static Dictionary<string, SkillScroll> SkillScrollStringMapping = new Dictionary<string, SkillScroll>
         {
-            { "alchy", SkillScroll.Alchemy },
-            { "animal lore", SkillScroll.AnimalLore },
-            { "animal tame", SkillScroll.AnimalTame },
-            { "arms lore", SkillScroll.ArmsLore },
-            { "beg", SkillScroll.Begging },
-            { "blacksmith", SkillScroll.Blacksmithing },
-            { "camp", SkillScroll.Camping },
-            { "carpentry", SkillScroll.Carpentry },
-            { "carto", SkillScroll.Cartography },
-            { "chivalry", SkillScroll.Chivalry },
-            { "cook", SkillScroll.Cooking },
-            { "detect", SkillScroll.DetectHidden },
-            { "discordance", SkillScroll.Discordance },
-            { "fish", SkillScroll.Fishing },
-            { "forensic", SkillScroll.ForensicEvaluation },
-            { "herd", SkillScroll.Herding },
-            { "inscript", SkillScroll.Inscription },
-            { "item id", SkillScroll.ItemID },
-            { "lockpick", SkillScroll.Lockpicking },
-            { "lumber", SkillScroll.LumberJacking },
-            { "mine", SkillScroll.Mining },
-            { "music", SkillScroll.Musicianship },
-            { "necromancy", SkillScroll.Necromancy },
-            { "peace", SkillScroll.Peacemaking },
-            { "poison", SkillScroll.Poisoning },
-            { "provo", SkillScroll.Provocation },
-            { "spirit", SkillScroll.SpiritSpeak },
-            { "stealth", SkillScroll.Stealthing },
-            { "tailor", SkillScroll.Tailoring },
-            { "taste", SkillScroll.TasteID },
-            { "tinker", SkillScroll.Tinkering },
-            { "track", SkillScroll.Tracking },
-            { "veterinary", SkillScroll.Veterinary }
+            { "Alchemy", SkillScroll.Alchemy },
+            { "Animal Lore", SkillScroll.AnimalLore },
+            { "Animal Taming", SkillScroll.AnimalTame },
+            { "Arms Lore", SkillScroll.ArmsLore },
+            { "Begging", SkillScroll.Begging },
+            { "Blacksmith", SkillScroll.Blacksmithing },
+            { "Camping", SkillScroll.Camping },
+            { "Carpentry", SkillScroll.Carpentry },
+            { "Cartography", SkillScroll.Cartography },
+            { "Chivalry", SkillScroll.Chivalry },
+            { "Cooking", SkillScroll.Cooking },
+            { "Detect Hidden", SkillScroll.DetectHidden },
+            { "Discordance", SkillScroll.Discordance },
+            { "Fishing", SkillScroll.Fishing }, 
+            { "Forensic Eval", SkillScroll.ForensicEvaluation },
+            { "Herding", SkillScroll.Herding },
+            { "Inscription", SkillScroll.Inscription },
+            { "Item ID", SkillScroll.ItemID },
+            { "Lockpicking", SkillScroll.Lockpicking },
+            { "Lumberjacking", SkillScroll.LumberJacking },
+            { "Mining", SkillScroll.Mining },
+            { "Musicianship", SkillScroll.Musicianship },
+            { "Necromancy", SkillScroll.Necromancy },
+            { "Peacemaking", SkillScroll.Peacemaking },
+            { "Poisoning", SkillScroll.Poisoning },
+            { "Provocation", SkillScroll.Provocation },
+            { "Spirit Speak", SkillScroll.SpiritSpeak },
+            { "Stealth", SkillScroll.Stealthing },
+            { "Tailoring", SkillScroll.Tailoring },
+            { "Taste Id", SkillScroll.TasteID },
+            { "Tinkering", SkillScroll.Tinkering },
+            { "Tracking", SkillScroll.Tracking },
+            { "Veterinary", SkillScroll.Veterinary }
         };
 
         public static Aspect GetAspectFromText(string text)
@@ -87,12 +87,15 @@ namespace FaceSplitScripter
         public static SkillScroll GetSkillScrollFromText(string text)
         {
             string strippedQuantityText = ScriptUtilities.RemoveQuantityFromText(text);
-            string lowercaseText = strippedQuantityText.ToLower();
+
+            // Shouldn't be a space here but trim just in case.
+            string lowercaseText = strippedQuantityText.ToLower().Trim();
 
             foreach (string scrollKey in SkillScrollStringMapping.Keys)
             {
+
                 // Skill scrolls should be an exact match as some links or other items may contain the same words as the skill scrolls.
-                if (lowercaseText.Equals(scrollKey))
+                if (String.Equals(lowercaseText, scrollKey, StringComparison.InvariantCultureIgnoreCase))
                 {
                     return SkillScrollStringMapping[scrollKey];
                 }
